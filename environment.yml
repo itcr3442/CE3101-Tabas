@@ -1,0 +1,7 @@
+name: bases
+channels:
+  - conda-forge
+dependencies:
+  - dotnet-aspnetcore
+  - dotnet-sdk
+  - nodejs
