@@ -84,7 +84,7 @@ app.MapPost("/maletas", (MaletaQData data) =>
 	{
 		numero = db().maletas.Last().numero + 1;
 	}
-	var maleta = new Maleta(numero, data.color, data.peso, data.costo_envio);
+	var maleta = new Maleta(numero,data.cedula_usuario, data.color, data.peso, data.costo_envio);
 	if (db().maletas.Contains(maleta))
 	{
 		return "{\"success\": 0}";
@@ -100,6 +100,10 @@ app.MapPost("/maletas", (MaletaQData data) =>
 app.MapGet("/maletas/info/{numero}", (uint numero) =>
 {
 	return JsonSerializer.Serialize(db().maletas.Find((maleta) => maleta.numero.Equals(numero)));
+});
+app.MapGet("/maletas/usuario/{cedula}", (uint cedula) =>
+{
+	return JsonSerializer.Serialize(db().maletas.Find((maleta) => maleta.cedula_usuario.Equals(cedula)));
 });
 
 app.MapGet("/bagcarts", () =>
@@ -187,37 +191,6 @@ app.MapPost("/vuelos", (VueloQData data) =>
 app.MapGet("/vuelos/info/{id}", (int id) =>
 {
 	return JsonSerializer.Serialize(db().vuelos.Find((x) => x.id.Equals(id)));
-});
-
-app.MapGet("/rel/usuario_maleta", () =>
-{
-	return db().rel_usuario_maleta;
-});
-
-app.MapPost("/rel/usuario_maleta", (RelUsuarioMaleta data) =>
-{
-
-	if (db().rel_usuario_maleta.Contains(data) ||
-		!db().usuarios.Exists((usuario) => usuario.cedula.Equals(data.cedula_usuario)))
-	{
-		return "{\"success\": 0}";
-	}
-	else
-	{
-		db().rel_usuario_maleta.Add(data);
-		DataBaseSingleton.Instance.save_state();
-		return "{\"success\": 1}";
-	}
-});
-
-app.MapGet("/rel/usuario_maleta/usuario/{cedula}", (uint cedula) =>
-{
-	return JsonSerializer.Serialize(db().rel_usuario_maleta.Find((x) => x.cedula_usuario.Equals(cedula)));
-});
-
-app.MapGet("/rel/usuario_maleta/maleta/{numero}", (uint numero) =>
-{
-	return JsonSerializer.Serialize(db().rel_usuario_maleta.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
 app.MapGet("/rel/scan_rayosx_maleta", () =>
@@ -364,12 +337,9 @@ app.MapGet("/reportes/maletas_x_cliente/{cedula}", (uint cedula) =>
 	Usuario? usuario = db().usuarios.Find((usuario) => usuario.cedula.Equals(cedula));
 	if (usuario != null)
 	{
-		List<RelUsuarioMaleta> vertices =
-			db().rel_usuario_maleta.FindAll(
-				(x) => x.cedula_usuario.Equals(cedula));
 		List<Maleta> maletas =
 			db().maletas.FindAll(
-				(maleta) => vertices.Exists((reg) => reg.numero_maleta.Equals(maleta.numero)));
+				(maleta) => maleta.cedula_usuario.Equals(usuario.cedula));
 		return JsonSerializer.Serialize(new MaletasXCliente(maletas, usuario));
 	}
 	return result;

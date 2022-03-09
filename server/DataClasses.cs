@@ -27,7 +27,6 @@ public class DataBaseState
 	public List<Vuelo> vuelos { get; set; }
 	public List<BagCart> bagcarts { get; set; }
 	public List<Maleta> maletas { get; set; }
-	public List<RelUsuarioMaleta> rel_usuario_maleta { get; set; }
 	public List<RelScanRayosXMaleta> rel_scan_rayosx_maleta { get; set; }
 	public List<RelScanAsignacionMaleta> rel_scan_asignacion_maleta { get; set; }
 	public List<RelMaletaBagCart> rel_maleta_bagcart { get; set; }
@@ -41,7 +40,6 @@ public class DataBaseState
 		tipos_avion = new List<TipoAvion>();
 		bagcarts = new List<BagCart>();
 		maletas = new List<Maleta>();
-		rel_usuario_maleta = new List<RelUsuarioMaleta>();
 		rel_scan_rayosx_maleta = new List<RelScanRayosXMaleta>();
 		rel_scan_asignacion_maleta = new List<RelScanAsignacionMaleta>();
 		rel_maleta_bagcart = new List<RelMaletaBagCart>();
@@ -69,12 +67,14 @@ public class Usuario
 public class Maleta
 {
 	public uint numero { get; set; }
+	public uint cedula_usuario {get;set;}
 	public int color { get; set; }
 	public decimal peso { get; set; }
 	public decimal costo_envio { get; set; }
-	public Maleta(uint numero, int color, decimal peso, decimal costo_envio)
+	public Maleta(uint numero, uint cedula_usuario,int color, decimal peso, decimal costo_envio)
 	{
 		this.numero = numero;
+		this.cedula_usuario = cedula_usuario;
 		this.color = color;
 		this.peso = peso;
 		this.costo_envio = costo_envio;
@@ -83,6 +83,7 @@ public class Maleta
 
 public class MaletaQData
 {
+	public uint cedula_usuario {get;set;}
 	public int color { get; set; }
 	public decimal peso { get; set; }
 	public decimal costo_envio { get; set; }
@@ -129,12 +130,6 @@ public class VueloQData{
 	}
 }
 
-public class RelUsuarioMaleta
-{
-
-	public uint cedula_usuario { get; set; }
-	public uint numero_maleta { get; set; }
-}
 public class RelScanRayosXMaleta
 {
 
