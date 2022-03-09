@@ -172,7 +172,7 @@ app.MapPost("/vuelos", (VueloQData data) =>
 		id = db().vuelos.Last().id + 1;
 	}
 	var vuelo = new Vuelo(id, data.tipo_avion);
-	if (db().vuelos.Contains(vuelo))
+	if (db().vuelos.Contains(vuelo) || !db().tipos_avion.Exists((x) => x.nombre.Equals(data.tipo_avion)))
 	{
 		return "{\"success\": 0}";
 	}
@@ -228,7 +228,8 @@ app.MapGet("/rel/scan_rayosx_maleta", () =>
 app.MapPost("/rel/scan_rayosx_maleta", (RelScanRayosXMaleta data) =>
 {
 
-	if (db().rel_scan_rayosx_maleta.Contains(data))
+	if (db().rel_scan_rayosx_maleta.Contains(data) ||
+		!db().trabajadores.Exists(x => x.cedula.Equals(data.cedula_trabajador)))
 	{
 		return "{\"success\": 0}";
 	}
@@ -260,7 +261,8 @@ app.MapPost("/rel/maleta_bagcart", (RelMaletaBagCart data) =>
 
 	if (db().rel_maleta_bagcart.Contains(data) ||
 		!db().rel_scan_rayosx_maleta.Exists((x) => x.numero_maleta.Equals(data.numero_maleta) &&
-			x.aceptada == true))
+			x.aceptada == true) ||
+		!db().rel_vuelo_bagcart.Exists(x=>x.id_bagcart.Equals(data.id_bagcart)))
 	{
 		return "{\"success\": 0}";
 	}
@@ -292,7 +294,8 @@ app.MapPost("/rel/scan_asignacion_maleta", (RelScanAsignacionMaleta data) =>
 {
 
 	if (db().rel_scan_asignacion_maleta.Contains(data) ||
-		!db().rel_scan_rayosx_maleta.Exists((reg) => reg.numero_maleta.Equals(data.numero_maleta)))
+		!db().rel_maleta_bagcart.Exists((reg) => reg.numero_maleta.Equals(data.numero_maleta))|| 
+		!db().trabajadores.Exists(x => x.cedula.Equals(data.cedula_trabajador)))
 	{
 		return "{\"success\": 0}";
 	}

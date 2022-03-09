@@ -11,8 +11,8 @@ public enum Rol
 
 public class TipoAvion
 {
-	public string nombre;
-	public uint capacidad;
+	public string nombre {get;set;}
+	public uint capacidad {get;set;}
 	public TipoAvion(string nombre, uint capacidad){
 		this.nombre = nombre;
 		this.capacidad = capacidad;
