@@ -15,39 +15,32 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+DataBaseState db()
+{
+	return DataBaseSingleton.Instance.database;
+}
+
 app.UseHttpsRedirection();
 
 app.MapGet("/trabajadores", () =>
 {
-	return DataBaseSingleton.Instance.database.trabajadores;
+	return db().trabajadores;
 });
 
 app.MapGet("/trabajadores/{cedula}", (uint cedula) =>
 {
-	var result = "";
-	var db = DataBaseSingleton.Instance.database.trabajadores;
-	if (db != null)
-	{
-		foreach (var item in db)
-		{
-			if (item.cedula.Equals(cedula))
-			{
-				result = JsonSerializer.Serialize(item);
-			}
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().trabajadores.Find((x) => x.cedula.Equals(cedula)));
 });
 
 app.MapPost("/trabajadores", (Trabajador trabajador) =>
 {
-	if (DataBaseSingleton.Instance.database.trabajadores.Contains(trabajador))
+	if (db().trabajadores.Contains(trabajador))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.trabajadores.Add(trabajador);
+		db().trabajadores.Add(trabajador);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
@@ -55,35 +48,23 @@ app.MapPost("/trabajadores", (Trabajador trabajador) =>
 
 app.MapGet("/usuarios", () =>
 {
-	return DataBaseSingleton.Instance.database.usuarios;
+	return db().usuarios;
 });
 
 app.MapGet("/usuarios/{cedula}", (uint cedula) =>
 {
-	var result = "";
-	var db = DataBaseSingleton.Instance.database.usuarios;
-	if (db != null)
-	{
-		foreach (var item in db)
-		{
-			if (item.cedula.Equals(cedula))
-			{
-				result = JsonSerializer.Serialize(item);
-			}
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().usuarios.Find((x) => x.cedula.Equals(cedula)));
 });
 
 app.MapPost("/usuarios", (Usuario user) =>
 {
-	if (DataBaseSingleton.Instance.database.usuarios.Contains(user))
+	if (db().usuarios.Contains(user))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.usuarios.Add(user);
+		db().usuarios.Add(user);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
@@ -91,98 +72,82 @@ app.MapPost("/usuarios", (Usuario user) =>
 
 app.MapGet("/maletas", () =>
 {
-	return DataBaseSingleton.Instance.database.maletas;
+	return db().maletas;
 });
 
 app.MapPost("/maletas", (MaletaQData data) =>
 {
+
 	uint numero = 0;
-	if (DataBaseSingleton.Instance.database.maletas.Count() != 0)
+
+	if (db().maletas.Count() != 0)
 	{
-		numero = DataBaseSingleton.Instance.database.maletas.Last().numero + 1;
+		numero = db().maletas.Last().numero + 1;
 	}
 	var maleta = new Maleta(numero, data.color, data.peso, data.costo_envio);
-	if (DataBaseSingleton.Instance.database.maletas.Contains(maleta))
+	if (db().maletas.Contains(maleta))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.maletas.Add(maleta);
+		db().maletas.Add(maleta);
 		DataBaseSingleton.Instance.save_state();
 		return $"{{\"numero\": {numero}, \"success\": 1}}";
 	}
 });
 
-app.MapGet("/maletas/info/{numero}", (int numero) =>
+app.MapGet("/maletas/info/{numero}", (uint numero) =>
 {
-	var result = "";
-	var db = DataBaseSingleton.Instance.database.maletas;
-	if (db != null)
-	{
-		foreach (var item in db)
-		{
-			if (item.numero.Equals(numero))
-			{
-				result = JsonSerializer.Serialize(item);
-			}
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().maletas.Find((maleta) => maleta.numero.Equals(numero)));
 });
 
 app.MapGet("/bagcarts", () =>
 {
-	return DataBaseSingleton.Instance.database.bagcarts;
+	return db().bagcarts;
 });
 
 app.MapPost("/bagcarts", (BagCartQData data) =>
 {
 	uint id = 0;
-	if (DataBaseSingleton.Instance.database.bagcarts.Count() != 0)
+
+	if (db().bagcarts.Count() != 0)
 	{
-		id = DataBaseSingleton.Instance.database.bagcarts.Last().id + 1;
+		id = db().bagcarts.Last().id + 1;
 	}
 	var bagcart = new BagCart(id, data.marca, data.modelo);
-	if (DataBaseSingleton.Instance.database.bagcarts.Contains(bagcart))
+	if (db().bagcarts.Contains(bagcart))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.bagcarts.Add(bagcart);
+		db().bagcarts.Add(bagcart);
 		DataBaseSingleton.Instance.save_state();
 		return $"{{\"id\": {id}, \"success\": 1}}";
 	}
 });
 
-app.MapGet("/bagcarts/info/{id}", (int id) =>
+app.MapGet("/bagcarts/info/{id}", (uint id) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.bagcarts)
-	{
-		if (item.id.Equals(id))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().bagcarts.Find((x) => x.id.Equals(id)));
 });
 
 app.MapGet("/tipo_avion", () =>
 {
-	return DataBaseSingleton.Instance.database.tipos_avion;
+	return db().tipos_avion;
 });
 
 app.MapPost("/tipos_avion", (TipoAvion data) =>
 {
-	if (DataBaseSingleton.Instance.database.tipos_avion.Contains(data))
+
+	if (db().tipos_avion.Contains(data))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.tipos_avion.Add(data);
+		db().tipos_avion.Add(data);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
@@ -190,37 +155,30 @@ app.MapPost("/tipos_avion", (TipoAvion data) =>
 
 app.MapGet("/tipos_avion/{nombre}", (string nombre) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.tipos_avion)
-	{
-		if (item.nombre.Equals(nombre))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().tipos_avion.Find((x) => x.nombre.Equals(nombre)));
 });
 
 app.MapGet("/vuelos", () =>
 {
-	return DataBaseSingleton.Instance.database.vuelos;
+	return db().vuelos;
 });
 
 app.MapPost("/vuelos", (VueloQData data) =>
 {
 	uint id = 0;
-	if (DataBaseSingleton.Instance.database.vuelos.Count() != 0)
+
+	if (db().vuelos.Count() != 0)
 	{
-		id = DataBaseSingleton.Instance.database.vuelos.Last().id + 1;
+		id = db().vuelos.Last().id + 1;
 	}
 	var vuelo = new Vuelo(id, data.tipo_avion);
-	if (DataBaseSingleton.Instance.database.vuelos.Contains(vuelo))
+	if (db().vuelos.Contains(vuelo))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.vuelos.Add(vuelo);
+		db().vuelos.Add(vuelo);
 		DataBaseSingleton.Instance.save_state();
 		return $"{{\"id\": {id}, \"success\": 1}}";
 	}
@@ -228,31 +186,25 @@ app.MapPost("/vuelos", (VueloQData data) =>
 
 app.MapGet("/vuelos/info/{id}", (int id) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.vuelos)
-	{
-		if (item.id.Equals(id))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().vuelos.Find((x) => x.id.Equals(id)));
 });
 
 app.MapGet("/rel/usuario_maleta", () =>
 {
-	return DataBaseSingleton.Instance.database.rel_usuario_maleta;
+	return db().rel_usuario_maleta;
 });
 
 app.MapPost("/rel/usuario_maleta", (RelUsuarioMaleta data) =>
 {
-	if (DataBaseSingleton.Instance.database.rel_usuario_maleta.Contains(data))
+
+	if (db().rel_usuario_maleta.Contains(data) ||
+		!db().usuarios.Exists((usuario) => usuario.cedula.Equals(data.cedula_usuario)))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.rel_usuario_maleta.Add(data);
+		db().rel_usuario_maleta.Add(data);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
@@ -260,44 +212,29 @@ app.MapPost("/rel/usuario_maleta", (RelUsuarioMaleta data) =>
 
 app.MapGet("/rel/usuario_maleta/usuario/{cedula}", (uint cedula) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_usuario_maleta)
-	{
-		if (item.cedula_usuario.Equals(cedula))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_usuario_maleta.Find((x) => x.cedula_usuario.Equals(cedula)));
 });
 
 app.MapGet("/rel/usuario_maleta/maleta/{numero}", (uint numero) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_usuario_maleta)
-	{
-		if (item.numero_maleta.Equals(numero))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_usuario_maleta.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
 app.MapGet("/rel/scan_rayosx_maleta", () =>
 {
-	return DataBaseSingleton.Instance.database.rel_scan_rayosx_maleta;
+	return db().rel_scan_rayosx_maleta;
 });
 
 app.MapPost("/rel/scan_rayosx_maleta", (RelScanRayosXMaleta data) =>
 {
-	if (DataBaseSingleton.Instance.database.rel_scan_rayosx_maleta.Contains(data))
+
+	if (db().rel_scan_rayosx_maleta.Contains(data))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.rel_scan_rayosx_maleta.Add(data);
+		db().rel_scan_rayosx_maleta.Add(data);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
@@ -305,53 +242,32 @@ app.MapPost("/rel/scan_rayosx_maleta", (RelScanRayosXMaleta data) =>
 
 app.MapGet("/rel/scan_rayosx/maleta/{numero}", (uint numero) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_scan_rayosx_maleta)
-	{
-		if (item.numero_maleta.Equals(numero))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_scan_rayosx_maleta.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
 app.MapGet("/rel/scan_rayosx/trabajador/{cedula}", (uint cedula) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_scan_rayosx_maleta)
-	{
-		if (item.cedula_trabajador.Equals(cedula))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_scan_rayosx_maleta.Find((x) => x.cedula_trabajador.Equals(cedula)));
 });
 
 app.MapGet("/rel/maleta_bagcart", () =>
 {
-	return DataBaseSingleton.Instance.database.rel_maleta_bagcart;
+	return db().rel_maleta_bagcart;
 });
 
 app.MapPost("/rel/maleta_bagcart", (RelMaletaBagCart data) =>
 {
-	var sin_rayosx = true;
-	// Buscar que esté escaneado con rayos X antes de asignar a un bagcart
-	foreach (var item in DataBaseSingleton.Instance.database.rel_scan_rayosx_maleta)
-	{
-		if (item.numero_maleta == data.numero_maleta)
-		{
-			sin_rayosx = false;
-		}
-	}
-	if (DataBaseSingleton.Instance.database.rel_maleta_bagcart.Contains(data) || sin_rayosx)
+
+	if (db().rel_maleta_bagcart.Contains(data) ||
+		!db().rel_scan_rayosx_maleta.Exists((x) => x.numero_maleta.Equals(data.numero_maleta) &&
+			x.aceptada == true))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.rel_maleta_bagcart.Add(data);
+		db().rel_scan_rayosx_maleta.RemoveAll((reg) => reg.numero_maleta.Equals(data.numero_maleta));
+		db().rel_maleta_bagcart.Add(data);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
@@ -359,44 +275,32 @@ app.MapPost("/rel/maleta_bagcart", (RelMaletaBagCart data) =>
 
 app.MapGet("/rel/maleta_bagcart/maleta/{numero}", (uint numero) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_maleta_bagcart)
-	{
-		if (item.numero_maleta.Equals(numero))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_maleta_bagcart.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
 app.MapGet("/rel/maleta_bagcart/bagcart/{id}", (uint id) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_maleta_bagcart)
-	{
-		if (item.id_bagcart.Equals(id))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_maleta_bagcart.Find((x) => x.id_bagcart.Equals(id)));
 });
 
 app.MapGet("/rel/scan_asignacion_maleta", () =>
 {
-	return DataBaseSingleton.Instance.database.rel_scan_asignacion_maleta;
+	return db().rel_scan_asignacion_maleta;
 });
 
 app.MapPost("/rel/scan_asignacion_maleta", (RelScanAsignacionMaleta data) =>
 {
-	if (DataBaseSingleton.Instance.database.rel_scan_asignacion_maleta.Contains(data))
+
+	if (db().rel_scan_asignacion_maleta.Contains(data) ||
+		!db().rel_scan_rayosx_maleta.Exists((reg) => reg.numero_maleta.Equals(data.numero_maleta)))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.rel_scan_asignacion_maleta.Add(data);
+		//remover maleta del bagcart al pasarla al avion
+		db().rel_maleta_bagcart.RemoveAll((reg) => reg.numero_maleta.Equals(data.numero_maleta));
+		db().rel_scan_asignacion_maleta.Add(data);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
@@ -404,57 +308,33 @@ app.MapPost("/rel/scan_asignacion_maleta", (RelScanAsignacionMaleta data) =>
 
 app.MapGet("/rel/scan_asignacion_maleta/maleta/{numero}", (uint numero) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_scan_asignacion_maleta)
-	{
-		if (item.numero_maleta.Equals(numero))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
 app.MapGet("/rel/scan_asignacion_maleta/trabajador/{cedula}", (uint cedula) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_scan_asignacion_maleta)
-	{
-		if (item.cedula_trabajador.Equals(cedula))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.Find((x) => x.cedula_trabajador.Equals(cedula)));
 });
 
 app.MapGet("/rel/scan_asignacion_maleta/vuelo/{id}", (uint id) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_scan_asignacion_maleta)
-	{
-		if (item.id_vuelo.Equals(id))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.Find((x) => x.id_vuelo.Equals(id)));
 });
 
 app.MapGet("/rel/vuelo_bagcart", () =>
 {
-	return DataBaseSingleton.Instance.database.rel_vuelo_bagcart;
+	return db().rel_vuelo_bagcart;
 });
 
 app.MapPost("/rel/vuelo_bagcart", (RelVueloBagCart data) =>
 {
-	if (DataBaseSingleton.Instance.database.rel_vuelo_bagcart.Contains(data))
+	if (db().rel_vuelo_bagcart.Contains(data))
 	{
 		return "{\"success\": 0}";
 	}
 	else
 	{
-		DataBaseSingleton.Instance.database.rel_vuelo_bagcart.Add(data);
+		db().rel_vuelo_bagcart.Add(data);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
@@ -462,39 +342,71 @@ app.MapPost("/rel/vuelo_bagcart", (RelVueloBagCart data) =>
 
 app.MapGet("/rel/vuelo_bagcart/bagcart/{id}", (uint id) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_vuelo_bagcart)
-	{
-		if (item.id_bagcart.Equals(id))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_vuelo_bagcart.Find((x) => x.id_bagcart.Equals(id)));
 });
 
 app.MapGet("/rel/vuelo_bagcart/vuelo/{id}", (uint id) =>
 {
-	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_vuelo_bagcart)
-	{
-		if (item.id_vuelo.Equals(id))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
-	}
-	return result;
+	return JsonSerializer.Serialize(db().rel_vuelo_bagcart.Find((x) => x.id_vuelo.Equals(id)));
 });
 
 app.MapGet("/rel/vuelo_bagcart/sello/{sello}", (string sello) =>
 {
+	return JsonSerializer.Serialize(db().rel_vuelo_bagcart.Find((x) => x.sello.Equals(sello))); ;
+});
+
+app.MapGet("/reportes/maletas_x_cliente/{cedula}", (uint cedula) =>
+{
 	var result = "";
-	foreach (var item in DataBaseSingleton.Instance.database.rel_vuelo_bagcart)
+	Usuario? usuario = db().usuarios.Find((usuario) => usuario.cedula.Equals(cedula));
+	if (usuario != null)
 	{
-		if (item.sello.Equals(sello))
-		{
-			result = JsonSerializer.Serialize(item);
-		}
+		List<RelUsuarioMaleta> vertices =
+			db().rel_usuario_maleta.FindAll(
+				(x) => x.cedula_usuario.Equals(cedula));
+		List<Maleta> maletas =
+			db().maletas.FindAll(
+				(maleta) => vertices.Exists((reg) => reg.numero_maleta.Equals(maleta.numero)));
+		return JsonSerializer.Serialize(new MaletasXCliente(maletas, usuario));
+	}
+	return result;
+});
+
+app.MapGet("/reportes/conciliacion_maletas/{id_vuelo}", (uint id_vuelo) =>
+{
+	var result = "";
+	Vuelo? vuelo = db().vuelos.Find((vuelo) => vuelo.id.Equals(id_vuelo));
+	TipoAvion? tipo_avion = db().tipos_avion.Find((tipo) => tipo.nombre.Equals(vuelo?.tipo_avion));
+
+	if (vuelo != null && tipo_avion != null)
+	{
+		List<RelScanAsignacionMaleta> rel_maletas_en_avion =
+			db().rel_scan_asignacion_maleta.FindAll(
+				(x) => x.id_vuelo.Equals(id_vuelo));
+
+		List<RelVueloBagCart> rel_vuelos_de_bagcarts =
+			db().rel_vuelo_bagcart.FindAll(
+				(x) => x.id_vuelo.Equals(id_vuelo));
+
+		List<RelMaletaBagCart> rel_maletas_en_bagcarts =
+			db().rel_maleta_bagcart.FindAll(
+				(x) => rel_vuelos_de_bagcarts.Exists(
+					(reg) => reg.id_bagcart.Equals(x.id_bagcart)
+			));
+
+		List<RelScanRayosXMaleta> rel_maletas_rechazadas =
+			db().rel_scan_rayosx_maleta.FindAll(
+				(x) => x.aceptada.Equals(false));
+
+		int maletas_en_avion = rel_maletas_en_avion.Count();
+		int maletas_en_bagcarts = rel_maletas_en_bagcarts.Count();
+		int maletas_rechazadas = rel_maletas_rechazadas.Count();
+		int total_maletas = maletas_en_avion + maletas_en_bagcarts + maletas_rechazadas;
+
+		return JsonSerializer.Serialize(
+			new ConciliacionMaletas(vuelo.id, tipo_avion.nombre, tipo_avion.capacidad, 
+				total_maletas, maletas_en_bagcarts, maletas_en_avion, maletas_rechazadas)
+		);
 	}
 	return result;
 });
