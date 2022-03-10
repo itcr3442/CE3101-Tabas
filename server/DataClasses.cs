@@ -1,32 +1,20 @@
 namespace server;
+using System.Runtime.Serialization;
 using System.Text.Json;
-[Serializable]
-public enum Rol
-{
-	Embarcador,
-	Scan,
-	Administrador,
-	Recepcionista,
-}
+using System.Text.Json.Serialization;
 
-public class TipoAvion
-{
-	public string nombre {get;set;}
-	public uint capacidad {get;set;}
-	public TipoAvion(string nombre, uint capacidad){
-		this.nombre = nombre;
-		this.capacidad = capacidad;
-	}
-}
+
 
 public class DataBaseState
 {
 	public List<Trabajador> trabajadores { get; set; }
 	public List<Usuario> usuarios { get; set; }
 	public List<TipoAvion> tipos_avion { get; set; }
+	public List<Avion> aviones { get; set; }
 	public List<Vuelo> vuelos { get; set; }
 	public List<BagCart> bagcarts { get; set; }
 	public List<Maleta> maletas { get; set; }
+	public List<Rol> roles { get; set; }
 	public List<RelScanRayosXMaleta> rel_scan_rayosx_maleta { get; set; }
 	public List<RelScanAsignacionMaleta> rel_scan_asignacion_maleta { get; set; }
 	public List<RelMaletaBagCart> rel_maleta_bagcart { get; set; }
@@ -38,8 +26,10 @@ public class DataBaseState
 		usuarios = new List<Usuario>();
 		vuelos = new List<Vuelo>();
 		tipos_avion = new List<TipoAvion>();
+		aviones = new List<Avion>();
 		bagcarts = new List<BagCart>();
 		maletas = new List<Maleta>();
+		roles = new List<Rol>();
 		rel_scan_rayosx_maleta = new List<RelScanRayosXMaleta>();
 		rel_scan_asignacion_maleta = new List<RelScanAsignacionMaleta>();
 		rel_maleta_bagcart = new List<RelMaletaBagCart>();
@@ -48,42 +38,71 @@ public class DataBaseState
 
 }
 
+public class TipoAvion
+{
+	public string? nombre { get; set; }
+	public uint capacidad { get; set; }
+	public uint secciones_bodega { get; set; }
+}
+
+public class Avion
+{
+	public uint nserie { get; set; }
+	public uint horas_uso { get; set; }
+	public string? modelo { get; set; }
+}
+
+public class Vuelo
+{
+	public uint numero { get; set; }
+	public uint avion { get; set; }
+}
+
+public class VueloQData
+{
+	public uint avion { get; set; }
+}
+public class Rol
+{
+	public string? nombre { get; set; }
+	public string? descripcion { get; set; }
+}
 public class Trabajador
 {
 	public uint cedula { get; set; }
+	public string? password_hash { get; set; }
 	public string? nombre { get; set; }
 	public string? primer_apellido { get; set; }
 	public string? segundo_apellido { get; set; }
+	public string? rol { get; set; }
+
 
 }
 
 public class Usuario
 {
 	public uint cedula { get; set; }
-	public string? nombre_completo { get; set; }
+	public string? password_hash { get; set; }
+	public string? nombre { get; set; }
+	public string? primer_apellido { get; set; }
+	public string? segundo_apellido { get; set; }
 	public uint telefono { get; set; }
 }
 
 public class Maleta
 {
 	public uint numero { get; set; }
-	public uint cedula_usuario {get;set;}
+	public uint cedula_usuario { get; set; }
 	public int color { get; set; }
 	public decimal peso { get; set; }
 	public decimal costo_envio { get; set; }
-	public Maleta(uint numero, uint cedula_usuario,int color, decimal peso, decimal costo_envio)
-	{
-		this.numero = numero;
-		this.cedula_usuario = cedula_usuario;
-		this.color = color;
-		this.peso = peso;
-		this.costo_envio = costo_envio;
-	}
+	public uint nvuelo { get; set; }
 }
 
 public class MaletaQData
 {
-	public uint cedula_usuario {get;set;}
+	public uint cedula_usuario { get; set; }
+	public uint nvuelo { get; set; }
 	public int color { get; set; }
 	public decimal peso { get; set; }
 	public decimal costo_envio { get; set; }
@@ -112,24 +131,6 @@ public class BagCartQData
 	}
 }
 
-public class Vuelo
-{
-	public uint id { get; set; }
-	public string tipo_avion { get; set; }
-	public Vuelo(uint id, string tipo_avion)
-	{
-		this.id = id;
-		this.tipo_avion = tipo_avion;
-	}
-}
-
-public class VueloQData{
-	public string tipo_avion{get;set;}
-	public VueloQData(){
-		tipo_avion = "None";
-	}
-}
-
 public class RelScanRayosXMaleta
 {
 
@@ -143,7 +144,6 @@ public class RelScanAsignacionMaleta
 
 	public uint cedula_trabajador { get; set; }
 	public uint numero_maleta { get; set; }
-	public uint id_vuelo { get; set; }
 }
 public class RelMaletaBagCart
 {
@@ -158,29 +158,34 @@ public class RelVueloBagCart
 	public uint id_bagcart { get; set; }
 	public string sello { get; set; }
 
-	public RelVueloBagCart(){
+	public RelVueloBagCart()
+	{
 		sello = "";
 	}
 }
 
 
-public class MaletasXCliente{
-	public List<Maleta> maletas {get;set;}
-	public Usuario usuario{get;set;} 
-	public MaletasXCliente(List<Maleta> maletas, Usuario usuario){
+public class MaletasXCliente
+{
+	public List<Maleta> maletas { get; set; }
+	public Usuario usuario { get; set; }
+	public MaletasXCliente(List<Maleta> maletas, Usuario usuario)
+	{
 		this.maletas = maletas;
 		this.usuario = usuario;
 	}
 }
-public class ConciliacionMaletas{
-	public uint numero_vuelo {get;set;}
-	public string tipo_avion {get;set;}
-	public uint capacidad {get;set;}
-	public int total_maletas{get;set;}
-	public int maletas_en_bagcarts{get;set;}
-	public int maletas_en_avion{get;set;}
-	public int maletas_rechazadas{get;set;}
-	public ConciliacionMaletas(uint numero_vuelo, string tipo_avion, uint capacidad, int total_maletas, int maletas_en_bagcarts, int maletas_en_avion, int maletas_rechazadas){
+public class ConciliacionMaletas
+{
+	public uint numero_vuelo { get; set; }
+	public string tipo_avion { get; set; }
+	public uint capacidad { get; set; }
+	public int total_maletas { get; set; }
+	public int maletas_en_bagcarts { get; set; }
+	public int maletas_en_avion { get; set; }
+	public int maletas_rechazadas { get; set; }
+	public ConciliacionMaletas(uint numero_vuelo, string tipo_avion, uint capacidad, int total_maletas, int maletas_en_bagcarts, int maletas_en_avion, int maletas_rechazadas)
+	{
 		this.numero_vuelo = numero_vuelo;
 		this.tipo_avion = tipo_avion;
 		this.capacidad = capacidad;

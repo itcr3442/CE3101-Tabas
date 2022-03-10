@@ -1,14 +1,12 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using server;
-using System.Text.Json;
 var builder = WebApplication.CreateBuilder(args);
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
@@ -20,21 +18,75 @@ DataBaseState db()
 	return DataBaseSingleton.Instance.database;
 }
 
+db();
+
 app.UseHttpsRedirection();
 
-app.MapGet("/trabajadores", () =>
+app.MapGet("/check_login", (uint cedula, string password_hash) =>
 {
-	return db().trabajadores;
+	if (!db().trabajadores.Exists(x =>
+			x.cedula == cedula &&
+			x.password_hash == password_hash
+		))
+	{
+		return "{\"success\": 0}";
+	}
+	else
+	{
+		return "{\"success\": 1}";
+	}
 });
 
-app.MapGet("/trabajadores/{cedula}", (uint cedula) =>
+app.MapGet("/trabajadores", (uint cedula_admin, string password_hash) =>
 {
-	return JsonSerializer.Serialize(db().trabajadores.Find((x) => x.cedula.Equals(cedula)));
+	if (!db().trabajadores.Exists(
+		x => x.cedula == cedula_admin &&
+			x.password_hash == password_hash &&
+			x.rol == "admin"
+	))
+	{
+		return null;
+	}
+	else
+	{
+		List<Trabajador> x = new List<Trabajador>();
+		foreach (var item in db().trabajadores)
+		{
+			x.Add(item);
+		}
+		foreach (var item in x)
+		{
+			item.password_hash = "*********";
+		}
+		return x;
+	}
 });
 
-app.MapPost("/trabajadores", (Trabajador trabajador) =>
+app.MapGet("/trabajadores/{cedula}", (uint cedula, uint cedula_admin, string password_hash) =>
 {
-	if (db().trabajadores.Contains(trabajador))
+	if (!db().trabajadores.Exists(x =>
+			x.cedula == cedula_admin &&
+			x.password_hash == password_hash &&
+			x.rol == "admin"
+		))
+	{
+		return null;
+	}
+	else
+	{
+		return JsonSerializer.Serialize(db().trabajadores.Find((x) => x.cedula.Equals(cedula)));
+	}
+});
+
+app.MapPost("/trabajadores", (uint cedula, string password_hash, Trabajador trabajador) =>
+{
+	if (db().trabajadores.Contains(trabajador) ||
+		!db().roles.Exists(x => x.nombre == trabajador.rol) ||
+		!db().trabajadores.Exists(x =>
+			x.cedula == cedula &&
+			x.password_hash == password_hash &&
+			x.rol == "admin"
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -48,7 +100,16 @@ app.MapPost("/trabajadores", (Trabajador trabajador) =>
 
 app.MapGet("/usuarios", () =>
 {
-	return db().usuarios;
+	List<Usuario> x = new List<Usuario>();
+	foreach (var item in db().usuarios)
+	{
+		x.Add(item);
+	}
+	foreach (var item in x)
+	{
+		item.password_hash = "*********";
+	}
+	return x;
 });
 
 app.MapGet("/usuarios/{cedula}", (uint cedula) =>
@@ -56,9 +117,14 @@ app.MapGet("/usuarios/{cedula}", (uint cedula) =>
 	return JsonSerializer.Serialize(db().usuarios.Find((x) => x.cedula.Equals(cedula)));
 });
 
-app.MapPost("/usuarios", (Usuario user) =>
+app.MapPost("/usuarios", (uint cedula, string password_hash, Usuario user) =>
 {
-	if (db().usuarios.Contains(user))
+	if (db().usuarios.Contains(user) ||
+		!db().trabajadores.Exists(x =>
+			x.cedula == cedula &&
+			x.password_hash == password_hash &&
+			(x.rol == "admin" || x.rol == "recepcionista")
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -75,7 +141,7 @@ app.MapGet("/maletas", () =>
 	return db().maletas;
 });
 
-app.MapPost("/maletas", (MaletaQData data) =>
+app.MapPost("/maletas", (uint cedula, string password_hash, MaletaQData data) =>
 {
 
 	uint numero = 0;
@@ -84,8 +150,22 @@ app.MapPost("/maletas", (MaletaQData data) =>
 	{
 		numero = db().maletas.Last().numero + 1;
 	}
-	var maleta = new Maleta(numero,data.cedula_usuario, data.color, data.peso, data.costo_envio);
-	if (db().maletas.Contains(maleta))
+
+	var maleta = new Maleta
+	{
+		nvuelo = data.nvuelo,
+		numero = numero,
+		cedula_usuario = data.cedula_usuario,
+		color = data.color,
+		peso = data.peso,
+		costo_envio = data.costo_envio
+	};
+
+	if (db().maletas.Contains(maleta) ||
+		db().trabajadores.Exists(
+			x => x.cedula == cedula &&
+				x.password_hash == password_hash
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -101,6 +181,7 @@ app.MapGet("/maletas/info/{numero}", (uint numero) =>
 {
 	return JsonSerializer.Serialize(db().maletas.Find((maleta) => maleta.numero.Equals(numero)));
 });
+
 app.MapGet("/maletas/usuario/{cedula}", (uint cedula) =>
 {
 	return JsonSerializer.Serialize(db().maletas.Find((maleta) => maleta.cedula_usuario.Equals(cedula)));
@@ -111,7 +192,7 @@ app.MapGet("/bagcarts", () =>
 	return db().bagcarts;
 });
 
-app.MapPost("/bagcarts", (BagCartQData data) =>
+app.MapPost("/bagcarts", (uint cedula, string password_hash, BagCartQData data) =>
 {
 	uint id = 0;
 
@@ -120,7 +201,11 @@ app.MapPost("/bagcarts", (BagCartQData data) =>
 		id = db().bagcarts.Last().id + 1;
 	}
 	var bagcart = new BagCart(id, data.marca, data.modelo);
-	if (db().bagcarts.Contains(bagcart))
+	if (db().bagcarts.Contains(bagcart) ||
+		!db().trabajadores.Exists(
+			x => x.cedula == cedula &&
+				x.password_hash == password_hash
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -142,10 +227,14 @@ app.MapGet("/tipo_avion", () =>
 	return db().tipos_avion;
 });
 
-app.MapPost("/tipos_avion", (TipoAvion data) =>
+app.MapPost("/tipos_avion", (uint cedula, string password_hash, TipoAvion data) =>
 {
 
-	if (db().tipos_avion.Contains(data))
+	if (db().tipos_avion.Contains(data) ||
+		!db().trabajadores.Exists(
+			x => x.cedula == cedula &&
+				x.password_hash == password_hash
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -159,7 +248,7 @@ app.MapPost("/tipos_avion", (TipoAvion data) =>
 
 app.MapGet("/tipos_avion/{nombre}", (string nombre) =>
 {
-	return JsonSerializer.Serialize(db().tipos_avion.Find((x) => x.nombre.Equals(nombre)));
+	return JsonSerializer.Serialize(db().tipos_avion.Find((x) => x.nombre == nombre));
 });
 
 app.MapGet("/vuelos", () =>
@@ -167,16 +256,20 @@ app.MapGet("/vuelos", () =>
 	return db().vuelos;
 });
 
-app.MapPost("/vuelos", (VueloQData data) =>
+app.MapPost("/vuelos", (uint cedula, string password_hash, VueloQData data) =>
 {
-	uint id = 0;
+	uint numero = 0;
 
 	if (db().vuelos.Count() != 0)
 	{
-		id = db().vuelos.Last().id + 1;
+		numero = db().vuelos.Last().numero + 1;
 	}
-	var vuelo = new Vuelo(id, data.tipo_avion);
-	if (db().vuelos.Contains(vuelo) || !db().tipos_avion.Exists((x) => x.nombre.Equals(data.tipo_avion)))
+	var vuelo = new Vuelo { numero = numero, avion = data.avion };
+	if (db().vuelos.Contains(vuelo) || !db().aviones.Exists((x) => x.nserie.Equals(data.avion)) ||
+		!db().trabajadores.Exists(
+			x => x.cedula == cedula &&
+				x.password_hash == password_hash
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -184,13 +277,13 @@ app.MapPost("/vuelos", (VueloQData data) =>
 	{
 		db().vuelos.Add(vuelo);
 		DataBaseSingleton.Instance.save_state();
-		return $"{{\"id\": {id}, \"success\": 1}}";
+		return $"{{\"numero\": {numero}, \"success\": 1}}";
 	}
 });
 
-app.MapGet("/vuelos/info/{id}", (int id) =>
+app.MapGet("/vuelos/info/{numero}", (int numero) =>
 {
-	return JsonSerializer.Serialize(db().vuelos.Find((x) => x.id.Equals(id)));
+	return JsonSerializer.Serialize(db().vuelos.Find((x) => x.numero.Equals(numero)));
 });
 
 app.MapGet("/rel/scan_rayosx_maleta", () =>
@@ -198,11 +291,13 @@ app.MapGet("/rel/scan_rayosx_maleta", () =>
 	return db().rel_scan_rayosx_maleta;
 });
 
-app.MapPost("/rel/scan_rayosx_maleta", (RelScanRayosXMaleta data) =>
+app.MapPost("/rel/scan_rayosx_maleta", (string password_hash, RelScanRayosXMaleta data) =>
 {
 
 	if (db().rel_scan_rayosx_maleta.Contains(data) ||
-		!db().trabajadores.Exists(x => x.cedula.Equals(data.cedula_trabajador)))
+		!db().trabajadores.Exists(x => x.cedula.Equals(data.cedula_trabajador) &&
+				x.password_hash == password_hash
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -229,13 +324,17 @@ app.MapGet("/rel/maleta_bagcart", () =>
 	return db().rel_maleta_bagcart;
 });
 
-app.MapPost("/rel/maleta_bagcart", (RelMaletaBagCart data) =>
+app.MapPost("/rel/maleta_bagcart", (uint cedula, string password_hash, RelMaletaBagCart data) =>
 {
 
 	if (db().rel_maleta_bagcart.Contains(data) ||
 		!db().rel_scan_rayosx_maleta.Exists((x) => x.numero_maleta.Equals(data.numero_maleta) &&
 			x.aceptada == true) ||
-		!db().rel_vuelo_bagcart.Exists(x=>x.id_bagcart.Equals(data.id_bagcart)))
+		!db().rel_vuelo_bagcart.Exists(x => x.id_bagcart.Equals(data.id_bagcart)) ||
+		!db().trabajadores.Exists(
+			x => x.cedula == cedula &&
+				x.password_hash == password_hash
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -263,12 +362,14 @@ app.MapGet("/rel/scan_asignacion_maleta", () =>
 	return db().rel_scan_asignacion_maleta;
 });
 
-app.MapPost("/rel/scan_asignacion_maleta", (RelScanAsignacionMaleta data) =>
+app.MapPost("/rel/scan_asignacion_maleta", (string password_hash, RelScanAsignacionMaleta data) =>
 {
 
 	if (db().rel_scan_asignacion_maleta.Contains(data) ||
-		!db().rel_maleta_bagcart.Exists((reg) => reg.numero_maleta.Equals(data.numero_maleta))|| 
-		!db().trabajadores.Exists(x => x.cedula.Equals(data.cedula_trabajador)))
+		!db().rel_maleta_bagcart.Exists((reg) => reg.numero_maleta.Equals(data.numero_maleta)) ||
+		!db().trabajadores.Exists(x => x.cedula.Equals(data.cedula_trabajador) &&
+				x.password_hash == password_hash
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -292,9 +393,13 @@ app.MapGet("/rel/scan_asignacion_maleta/trabajador/{cedula}", (uint cedula) =>
 	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.Find((x) => x.cedula_trabajador.Equals(cedula)));
 });
 
-app.MapGet("/rel/scan_asignacion_maleta/vuelo/{id}", (uint id) =>
+app.MapGet("/rel/scan_asignacion_maleta/vuelo/{numero}", (uint numero) =>
 {
-	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.Find((x) => x.id_vuelo.Equals(id)));
+	var maletas = db().maletas.FindAll(x => x.numero == numero);
+	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.FindAll(
+		(rel) => maletas.Exists(
+			(maleta) => maleta.numero == rel.numero_maleta
+	)));
 });
 
 app.MapGet("/rel/vuelo_bagcart", () =>
@@ -302,9 +407,13 @@ app.MapGet("/rel/vuelo_bagcart", () =>
 	return db().rel_vuelo_bagcart;
 });
 
-app.MapPost("/rel/vuelo_bagcart", (RelVueloBagCart data) =>
+app.MapPost("/rel/vuelo_bagcart", (uint cedula, string password_hash, RelVueloBagCart data) =>
 {
-	if (db().rel_vuelo_bagcart.Contains(data))
+	if (db().rel_vuelo_bagcart.Contains(data) ||
+		!db().trabajadores.Exists(
+			x => x.cedula == cedula &&
+				x.password_hash == password_hash
+		))
 	{
 		return "{\"success\": 0}";
 	}
@@ -345,40 +454,30 @@ app.MapGet("/reportes/maletas_x_cliente/{cedula}", (uint cedula) =>
 	return result;
 });
 
-app.MapGet("/reportes/conciliacion_maletas/{id_vuelo}", (uint id_vuelo) =>
+app.MapGet("/reportes/conciliacion_maletas/{nvuelo}", (uint nvuelo) =>
 {
 	var result = "";
-	Vuelo? vuelo = db().vuelos.Find((vuelo) => vuelo.id.Equals(id_vuelo));
-	TipoAvion? tipo_avion = db().tipos_avion.Find((tipo) => tipo.nombre.Equals(vuelo?.tipo_avion));
+	Vuelo? vuelo = db().vuelos.Find((vuelo) => vuelo.numero.Equals(nvuelo));
+	Avion? avion = db().aviones.Find(x => x.nserie == vuelo?.avion);
+	TipoAvion? tipo_avion = db().tipos_avion.Find((tipo) => tipo.nombre == avion?.modelo);
 
-	if (vuelo != null && tipo_avion != null)
+	if (vuelo != null && tipo_avion != null && tipo_avion.nombre != null)
 	{
-		List<RelScanAsignacionMaleta> rel_maletas_en_avion =
-			db().rel_scan_asignacion_maleta.FindAll(
-				(x) => x.id_vuelo.Equals(id_vuelo));
+		var maletas = db().maletas.FindAll(x => x.nvuelo == vuelo.numero);
+		var maletas_en_avion = db().rel_scan_asignacion_maleta.FindAll(
+			x => maletas.Exists(maleta => maleta.numero == x.numero_maleta
+		));
+		var maletas_no_en_avion = db().rel_scan_asignacion_maleta.FindAll(
+			x => !maletas.Exists(maleta => maleta.numero == x.numero_maleta
+		));
+		var maletas_en_bagcarts = db().rel_maleta_bagcart.FindAll(
+			x => maletas_no_en_avion.Exists(maleta => maleta.numero_maleta == x.numero_maleta));
 
-		List<RelVueloBagCart> rel_vuelos_de_bagcarts =
-			db().rel_vuelo_bagcart.FindAll(
-				(x) => x.id_vuelo.Equals(id_vuelo));
-
-		List<RelMaletaBagCart> rel_maletas_en_bagcarts =
-			db().rel_maleta_bagcart.FindAll(
-				(x) => rel_vuelos_de_bagcarts.Exists(
-					(reg) => reg.id_bagcart.Equals(x.id_bagcart)
-			));
-
-		List<RelScanRayosXMaleta> rel_maletas_rechazadas =
-			db().rel_scan_rayosx_maleta.FindAll(
-				(x) => x.aceptada.Equals(false));
-
-		int maletas_en_avion = rel_maletas_en_avion.Count();
-		int maletas_en_bagcarts = rel_maletas_en_bagcarts.Count();
-		int maletas_rechazadas = rel_maletas_rechazadas.Count();
-		int total_maletas = maletas_en_avion + maletas_en_bagcarts + maletas_rechazadas;
-
+		var maletas_rechazadas = db().rel_maleta_bagcart.FindAll(
+			x => !maletas_no_en_avion.Exists(maleta => maleta.numero_maleta == x.numero_maleta));
 		return JsonSerializer.Serialize(
-			new ConciliacionMaletas(vuelo.id, tipo_avion.nombre, tipo_avion.capacidad, 
-				total_maletas, maletas_en_bagcarts, maletas_en_avion, maletas_rechazadas)
+			new ConciliacionMaletas(vuelo.numero, tipo_avion.nombre, tipo_avion.capacidad,
+				maletas.Count(), maletas_en_bagcarts.Count(), maletas_en_avion.Count(), maletas_rechazadas.Count())
 		);
 	}
 	return result;
