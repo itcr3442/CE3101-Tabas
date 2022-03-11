@@ -62,11 +62,13 @@ public class VueloQData
 {
 	public uint avion { get; set; }
 }
+
 public class Rol
 {
 	public string? nombre { get; set; }
 	public string? descripcion { get; set; }
 }
+
 public class Trabajador
 {
 	public uint cedula { get; set; }
@@ -107,6 +109,7 @@ public class MaletaQData
 	public decimal peso { get; set; }
 	public decimal costo_envio { get; set; }
 }
+
 public class BagCart
 {
 	public uint id { get; set; }
@@ -139,18 +142,21 @@ public class RelScanRayosXMaleta
 	public bool aceptada { get; set; }
 	public string? comentarios { get; set; }
 }
+
 public class RelScanAsignacionMaleta
 {
 
 	public uint cedula_trabajador { get; set; }
 	public uint numero_maleta { get; set; }
 }
+
 public class RelMaletaBagCart
 {
 
 	public uint numero_maleta { get; set; }
 	public uint id_bagcart { get; set; }
 }
+
 public class RelVueloBagCart
 {
 
@@ -164,7 +170,6 @@ public class RelVueloBagCart
 	}
 }
 
-
 public class MaletasXCliente
 {
 	public List<Maleta> maletas { get; set; }
@@ -175,6 +180,7 @@ public class MaletasXCliente
 		this.usuario = usuario;
 	}
 }
+
 public class ConciliacionMaletas
 {
 	public uint numero_vuelo { get; set; }

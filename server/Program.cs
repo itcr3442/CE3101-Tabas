@@ -309,12 +309,12 @@ app.MapPost("/rel/scan_rayosx_maleta", (string password_hash, RelScanRayosXMalet
 	}
 });
 
-app.MapGet("/rel/scan_rayosx/maleta/{numero}", (uint numero) =>
+app.MapGet("/rel/scan_rayosx_maleta/maleta/{numero}", (uint numero) =>
 {
 	return JsonSerializer.Serialize(db().rel_scan_rayosx_maleta.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
-app.MapGet("/rel/scan_rayosx/trabajador/{cedula}", (uint cedula) =>
+app.MapGet("/rel/scan_rayosx_maleta/trabajador/{cedula}", (uint cedula) =>
 {
 	return JsonSerializer.Serialize(db().rel_scan_rayosx_maleta.Find((x) => x.cedula_trabajador.Equals(cedula)));
 });
