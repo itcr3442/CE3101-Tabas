@@ -38,7 +38,7 @@ nocite: |
 
 # Mapeo de Diagrama ER a Modelo Relacional
 
-## Diagrama
+## Diagrama ER
 
 ![Diagrama Entidad Relación](DiagramaER.png)
 
@@ -208,3 +208,11 @@ Table: Relación `RelVueloBagCart`
 | sello(PK)             | string        |
 | id_bagcart(FK)        | entero        |
 | nvuelo(FK)            | entero        |
+
+## Diagrama modelo relacional resultante
+
+![Diagrama modelo relacional](./DiagramaModeloRelacional.png)
+
+## Diagrama Arquitectura
+
+![Diagrama de Arquitectura](./DiagramaArquitectura.png)
