@@ -1,0 +1,7 @@
+{
+  "/": {
+    "target": "http://127.0.0.2",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

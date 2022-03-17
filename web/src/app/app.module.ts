@@ -1,24 +1,27 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { AuthGuard } from './guards/auth.guard';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { WorkerRegisterComponent } from './worker-register/worker-register.component';
-import { UserRegisterComponent } from './user-register/user-register.component';
-import { BagCreationComponent } from './bag-creation/bag-creation.component';
-import { BagCartCreationComponent } from './bag-cart-creation/bag-cart-creation.component';
-import { PlaneAssignmentComponent } from './plane-assignment/plane-assignment.component';
-import { BagCartAssignmentComponent } from './bag-cart-assignment/bag-cart-assignment.component';
-import { CloseBagCartComponent } from './close-bag-cart/close-bag-cart.component';
-import { PdfReportComponent } from './pdf-report/pdf-report.component';
-import { PlanesListComponent } from './planes-list/planes-list.component';
+import { LoginComponent } from './components/login/login.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { WorkerRegisterComponent } from './components/worker-register/worker-register.component';
+import { UserRegisterComponent } from './components/user-register/user-register.component';
+import { BagCreationComponent } from './components/bag-creation/bag-creation.component';
+import { BagCartCreationComponent } from './components/bag-cart-creation/bag-cart-creation.component';
+import { PlaneAssignmentComponent } from './components/plane-assignment/plane-assignment.component';
+import { BagCartAssignmentComponent } from './components/bag-cart-assignment/bag-cart-assignment.component';
+import { CloseBagCartComponent } from './components/close-bag-cart/close-bag-cart.component';
+import { PdfReportComponent } from './components/pdf-report/pdf-report.component';
+import { PlanesListComponent } from './components/planes-list/planes-list.component';
 import { RouterModule } from '@angular/router';
-import { BagcartsListComponent } from './bagcarts-list/bagcarts-list.component';
-import { WorkersListComponent } from './workers-list/workers-list.component';
-import { BagsListComponent } from './bags-list/bags-list.component';
-import { HomePageComponent } from './home-page/home-page.component';
+import { BagcartsListComponent } from './components/bagcarts-list/bagcarts-list.component';
+import { WorkersListComponent } from './components/workers-list/workers-list.component';
+import { BagsListComponent } from './components/bags-list/bags-list.component';
 
 @NgModule({
   declarations: [
@@ -37,21 +40,14 @@ import { HomePageComponent } from './home-page/home-page.component';
     BagcartsListComponent,
     WorkersListComponent,
     BagsListComponent,
-    HomePageComponent
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(
-      [
-        {path: 'home_page', component: HomePageComponent},
-        {path: 'planes_list', component: PlanesListComponent},
-        {path: 'workers_list', component: WorkersListComponent},
-        {path: 'bagcarts_list', component: BagcartsListComponent},
-        {path: 'bags_list', component: BagsListComponent}
-      ]
-    )
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
