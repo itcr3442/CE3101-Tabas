@@ -13,6 +13,12 @@ import { PlaneAssignmentComponent } from './plane-assignment/plane-assignment.co
 import { BagCartAssignmentComponent } from './bag-cart-assignment/bag-cart-assignment.component';
 import { CloseBagCartComponent } from './close-bag-cart/close-bag-cart.component';
 import { PdfReportComponent } from './pdf-report/pdf-report.component';
+import { PlanesListComponent } from './planes-list/planes-list.component';
+import { RouterModule } from '@angular/router';
+import { BagcartsListComponent } from './bagcarts-list/bagcarts-list.component';
+import { WorkersListComponent } from './workers-list/workers-list.component';
+import { BagsListComponent } from './bags-list/bags-list.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -26,11 +32,24 @@ import { PdfReportComponent } from './pdf-report/pdf-report.component';
     PlaneAssignmentComponent,
     BagCartAssignmentComponent,
     CloseBagCartComponent,
-    PdfReportComponent
+    PdfReportComponent,
+    PlanesListComponent,
+    BagcartsListComponent,
+    WorkersListComponent,
+    BagsListComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    RouterModule.forRoot(
+      [
+        {path: 'home_page', component: HomePageComponent},
+        {path: 'planes_list', component: PlanesListComponent},
+        {path: 'workers_list', component: WorkersListComponent},
+        {path: 'bagcarts_list', component: BagcartsListComponent},
+        {path: 'bags_list', component: BagsListComponent}
+      ]
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]
