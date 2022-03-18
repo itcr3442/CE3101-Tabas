@@ -9,6 +9,7 @@
 plugins {
     id("com.android.application") version "7.1.0-beta02"
     id("org.jetbrains.kotlin.android") version "1.5.30"
+    id("com.ncorti.ktfmt.gradle") version "0.8.0"
 }
 
 android {
@@ -28,9 +29,15 @@ android {
             isMinifyEnabled = true
         }
     }
+
+    lint {
+	    abortOnError = false
+	}
 }
 
 dependencies {
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("androidx.appcompat:appcompat-resources:1.3.0")
+    implementation("com.squareup.retrofit2:retrofit:2.1.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.1.0")
 }

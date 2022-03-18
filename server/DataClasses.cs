@@ -107,7 +107,7 @@ public class Trabajador
 	public string? primer_apellido { get; set; }
 	public string? segundo_apellido { get; set; }
 	public string? rol { get; set; }
-
+	public Trabajador(){}
 
 }
 
@@ -198,6 +198,12 @@ public class RelVueloBagCart
 	{
 		sello = "";
 	}
+}
+
+public class QRelVueloBagCart
+{
+	public uint id_vuelo { get; set; }
+	public uint id_bagcart { get; set; }
 }
 
 public class MaletasXCliente
