@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service'
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RepositoryService } from 'src/app/services/repository.service';
 
 @Component({
@@ -15,8 +15,6 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required])
   })
   message: string = ""
-  bcrypt = require('bcryptjs');
-  salt = this.bcrypt.genSaltSync(10);
   logged: boolean;
   constructor(
     private router: Router,
@@ -49,10 +47,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
 
-      let hash = this.bcrypt.hashSync(this.password, this.salt);
-      if (this.password === "cusadmin") {
-        hash = this.password
-      }
+      let hash = this.password
       let loginUrl = "check_login?cedula=" + this.id.trim() + "&password_hash=" + hash
 
       console.log("GET url: " + loginUrl)
@@ -74,7 +69,7 @@ export class LoginComponent implements OnInit {
 
     }
     else {
-      this.message = "Por favor verifique que ingreso ambos campos y su cédula solo contiene dígitos";
+      this.message = "Por favor verifique que ingresó ambos campos y su cédula solo contiene dígitos";
     }
   }
 }

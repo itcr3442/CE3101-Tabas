@@ -11,9 +11,8 @@
     <h3>Log In</h3>
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <div class="mb-3 form-group">
-            <label for="exampleInputEmail1">Cédula</label>
-            <input type="email" formControlName="id" class="form-control" aria-describedby="emailHelp"
-                placeholder="Ingrese su cédula">
+            <label>Cédula</label>
+            <input type="email" formControlName="id" class="form-control" placeholder="Ingrese su cédula">
         </div>
         <div class="mb-3 form-group">
             <label for="exampleInputPassword1">Contraseña</label>
