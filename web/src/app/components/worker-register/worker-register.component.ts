@@ -20,8 +20,6 @@ export class WorkerRegisterComponent implements OnInit {
   })
   roles = ['admin', 'scan', 'recepcionista', 'embarcador'];
   message: string = ""
-  bcrypt = require('bcryptjs');
-  salt = this.bcrypt.genSaltSync(10);
 
   constructor(
     private router: Router,
@@ -74,7 +72,7 @@ export class WorkerRegisterComponent implements OnInit {
 
       let registerUrl = "trabajadores?cedula=" + token.id + "&password_hash=" + token.password
 
-      let hash = this.bcrypt.hashSync(this.password, this.salt);
+      let hash = this.password
       let new_worker = {
         "cedula": this.id,
         "password_hash": hash,

@@ -15,8 +15,6 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', [Validators.required])
   })
   message: string = ""
-  bcrypt = require('bcryptjs');
-  salt = this.bcrypt.genSaltSync(10);
   logged: boolean;
   constructor(
     private router: Router,
@@ -49,10 +47,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
 
-      let hash = this.bcrypt.hashSync(this.password, this.salt);
-      if (this.password === "cusadmin") {
-        hash = this.password
-      }
+      let hash = this.password
       let loginUrl = "check_login?cedula=" + this.id.trim() + "&password_hash=" + hash
 
       console.log("GET url: " + loginUrl)
