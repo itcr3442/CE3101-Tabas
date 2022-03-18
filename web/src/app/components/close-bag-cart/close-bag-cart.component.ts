@@ -10,8 +10,12 @@ import { BagCarts } from 'src/app/interfaces/BagCarts.model';
   templateUrl: './close-bag-cart.component.html',
   styleUrls: ['./close-bag-cart.component.css']
 })
+/**
+ * Componente que contiene la página del cierre de Bagcarts
+ */
 export class CloseBagCartComponent implements OnInit {
 
+  //Array de BagCarts a mostrar en pantalla
   public bagcarts_list!: BagCarts[];
 
   registerForm = new FormGroup({
@@ -34,6 +38,10 @@ export class CloseBagCartComponent implements OnInit {
     return this.registerForm.controls['id'].value
   }
 
+   /**
+   * Método que realiza el request al servidor para obtener todos
+   * los BagCarts para mostrarlos en la lista correspondiente.
+   */
   public getAllBagCarts = () =>{
     let registerUrl = "bagcarts"
     this.repo.getData(registerUrl)
@@ -43,7 +51,10 @@ export class CloseBagCartComponent implements OnInit {
       }
     )
   }
-
+   /**
+   * Método que se ejecuta al apretar el botón registrar.
+   * Muestra en pantalla el mensaje "No implementado"
+   */
   onSubmit() {
     this.message = "No implementado"
   }

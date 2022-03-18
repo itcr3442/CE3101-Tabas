@@ -7,6 +7,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './planes-list.component.html',
   styleUrls: ['./planes-list.component.css']
 })
+/**
+ * Componente que contiene la página donde se realiza la asignación de
+ * aviones a lops vuelos
+ */
 export class PlanesListComponent implements OnInit {
 
   registerForm = new FormGroup({
@@ -22,10 +26,15 @@ export class PlanesListComponent implements OnInit {
     private repo: RepositoryService
   ) { }
 
+  
   ngOnInit(): void {
     this.getAllPlaneTypes();
   }
 
+  /**
+   * Método que realiza el request al servidor para obtener todos
+   * los tipos de aviones disponibles.
+   */
   public getAllPlaneTypes = () =>{
     let loginUrl = "tipo_avion";
     this.repo.getData(loginUrl)
@@ -35,7 +44,10 @@ export class PlanesListComponent implements OnInit {
       }
     )
   }
-
+ /**
+   * Método que se ejecuta al apretar el botón registrar.
+   * Muestra en pantalla el mensaje "No implementado"
+   */
   onSubmit() {
     this.message = "No implementado"
   }

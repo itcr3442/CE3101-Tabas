@@ -10,6 +10,9 @@ import { Flights } from '../../interfaces/Fligths.model';
   templateUrl: './flight-list.component.html',
   styleUrls: ['./flight-list.component.css']
 })
+/**
+ * Componente que contiene la página con la lista de todos los vuelos registrados.
+ */
 export class FlightListComponent implements OnInit {
 
   public flights_list!: Flights[];
@@ -22,6 +25,10 @@ export class FlightListComponent implements OnInit {
     this.getAllFlights();
   }
 
+ /**
+   * Método que realiza el request al servidor para obtener todos
+   * los vuelos disponibles.
+   */
   public getAllFlights = () =>{
     let loginUrl = "vuelos";
     this.repo.getData(loginUrl)

@@ -9,8 +9,12 @@ import { BagCarts } from 'src/app/interfaces/BagCarts.model';
   templateUrl: './bag-cart-creation.component.html',
   styleUrls: ['./bag-cart-creation.component.css']
 })
+/**
+ * Componente que contiene la página del registro de Bagcarts
+ */
 export class BagCartCreationComponent implements OnInit {
 
+  //Array de BagCarts a mostrar en pantalla
   public bagcarts_list!: BagCarts[];
 
   registerForm = new FormGroup({
@@ -18,6 +22,7 @@ export class BagCartCreationComponent implements OnInit {
     modelo: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')])
   })
 
+  //Mensaje que parece si ocurre algún error 
   message: string = ""
 
   constructor(
@@ -38,6 +43,10 @@ export class BagCartCreationComponent implements OnInit {
     return this.registerForm.controls['modelo'].value
   }
 
+    /**
+   * Método que realiza el request al servidor para obtener todos
+   * los BagCarts para mostrarlos en la lista correspondiente.
+   */
   public getAllBagCarts = () =>{
     let registerUrl = "bagcarts"
     this.repo.getData(registerUrl)
@@ -48,6 +57,10 @@ export class BagCartCreationComponent implements OnInit {
     )
   }
 
+    /**
+   * Método que se ejecuta al apretar el botón registrar.
+   * Muestra en pantalla el mensaje "No implementado"
+   */
   onSubmit() {
     this.message = "No implementado"
   }

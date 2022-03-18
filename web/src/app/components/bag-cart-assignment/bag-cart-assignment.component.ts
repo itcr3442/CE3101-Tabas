@@ -9,8 +9,13 @@ import { BagCarts } from 'src/app/interfaces/BagCarts.model';
   templateUrl: './bag-cart-assignment.component.html',
   styleUrls: ['./bag-cart-assignment.component.css']
 })
+
+/**
+ * Componente que contiene la página de asignación de Bagcarts a los aviones
+ */
 export class BagCartAssignmentComponent implements OnInit {
 
+  //Array de BagCarts a mostrar en pantalla
   public bagcarts_list!: BagCarts[];
 
   registerForm = new FormGroup({
@@ -18,6 +23,7 @@ export class BagCartAssignmentComponent implements OnInit {
     idbagcart: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')])
   })
 
+  //Mensaje que parece si ocurre algún error 
   message: string = ""
 
   constructor(
@@ -25,7 +31,7 @@ export class BagCartAssignmentComponent implements OnInit {
     private repo: RepositoryService,
     private authService: AuthService
   ) { }
-
+  
   ngOnInit(): void {
     this.getAllBagCarts();
   }
@@ -38,16 +44,26 @@ export class BagCartAssignmentComponent implements OnInit {
     return this.registerForm.controls['idbagcart'].value
   }
 
-  public getAllBagCarts = () => {
+  /**
+   * Método que realiza el request al servidor para obtener todos
+   * los BagCarts para mostrarlos en la lista correspondiente.
+   */
+  public getAllBagCarts = () =>{
     let registerUrl = "bagcarts"
     this.repo.getData(registerUrl)
-      .subscribe(res => {
+    .subscribe(res => {
         console.log("Result:" + JSON.stringify(res));
         this.bagcarts_list = res as BagCarts[];
       }
-      )
+    )
   }
 
+  /**
+   * Método que se ejecuta al apretar el botón registrar.
+   * Verifica si el ususario ha iniciado sesión, para obtener los valores de las
+   * casillas correspondientes y así registrar la relación entre el Bagcart 
+   * y el vuelo indicados en la base de datos
+   */
   onSubmit() {
     if (this.registerForm.valid) {
 
@@ -78,7 +94,7 @@ export class BagCartAssignmentComponent implements OnInit {
           }
           else if ((<any>res).success === 0) {
             this.message = "Sus credenciales no son válidos, o este bag cart ya está registrado en el sistema";
-          }
+          } 
         }
         )
     }
