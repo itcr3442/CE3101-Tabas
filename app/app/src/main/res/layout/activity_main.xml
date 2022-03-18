@@ -4,6 +4,11 @@
               android:layout_height="match_parent"
               android:orientation="vertical" >
 
+    <EditText android:id="@+id/baseUrl"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="http://192.168.34.68:5265" />
+
     <EditText android:id="@+id/username"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"

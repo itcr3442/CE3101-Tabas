@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="cr.ac.tec.ce3101.tabas.app">
     <uses-permission android:name="android.permission.INTERNET" />
     <application android:label="Tabas"
-                 android:theme="@style/Theme.AppCompat"
+                 android:name=".TabasApp"
+                 android:theme="@style/Theme.MaterialComponents"
                  android:usesCleartextTraffic="true">
 
         <activity android:name=".MainActivity">
@@ -11,5 +12,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+		<activity android:name=".OverviewActivity"/>
     </application>
 </manifest>

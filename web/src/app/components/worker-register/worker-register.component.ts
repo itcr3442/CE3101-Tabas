@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RepositoryService } from 'src/app/services/repository.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Workers } from 'src/app/interfaces/workers.model';
 
 @Component({
   selector: 'app-worker-register',
@@ -10,6 +11,9 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./worker-register.component.css']
 })
 export class WorkerRegisterComponent implements OnInit {
+
+  public worker_list!: Workers[];
+
   registerForm = new FormGroup({
     id: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')]),
     nombre: new FormControl('', [Validators.required]),
@@ -29,6 +33,7 @@ export class WorkerRegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAllWorkers();
   }
 
   get id() {
@@ -52,6 +57,22 @@ export class WorkerRegisterComponent implements OnInit {
   }
   get apellido2() {
     return this.registerForm.controls['apellido2'].value
+  }
+
+  public getAllWorkers = () =>{
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login/redirect']);
+      return
+    }
+    let token = this.authService.getCredentials()
+    let registerUrl = "trabajadores?cedula_admin=" + token.id + "&password_hash=" + token.password
+    console.log(registerUrl);
+    this.repo.getData(registerUrl)
+    .subscribe(res => {
+        console.log("Result:" + JSON.stringify(res));
+        this.worker_list = res as Workers[];
+      }
+    )
   }
 
   changeRole(e: any) {
