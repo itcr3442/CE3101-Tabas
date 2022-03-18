@@ -34,4 +34,54 @@ nocite: |
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
+# Servidor 
 
+Requisitos previos:
+
+- Windows 10 Actualizado
+- Conexión a internet
+
+Pasos de instalación:
+
+
+1. En primer lugar debe instalar instalar el SDK de .NET Core para tener acceso a las herramientas de `dotnet`. Los paquetes de instalación se pueden conseguir en el link provisto anteriormente.
+
+2. Instale el `Hosting Bundle` de Runtime de ASP .NET Core  <https://dotnet.microsoft.com/en-us/download/dotnet/6.0> el cual permite correr aplicaciones de .NET Core en IIS.
+
+![](manuales/hostingbundle.png)
+
+3. Abra el administrador de programas (comando `appwiz.cpl`)
+
+4. Abra el menú de "Agregar o Desactivar características de Windows"
+
+5. Marque la opción de "Internet Information Services" y haga click en aceptar
+
+![](manuales/iis.png)
+
+6. En el menú de búsqueda de la barra de tareas busque el programa "Administrador de Internet Information Services"
+
+![](manuales/adminiis.png)
+
+7. Haga click derecho en el menú "Sitios" y escoja la opción de Agregar un nuevo sitio web.
+
+8. La configuración dependerá según sus necesidades, como prueba de concepto, se usará el usuario "Todos" para autenticación. Asegúrese de que el usuario que utilizará para autenticarse tenga acceso a la carpeta en la que se encuentra la aplicación. Utilice la ruta de la carpeta en donde se encuentra la version compilada de la aplicación. De igual manera, utilice la dirección IP adecuada para su uso, al igual que el nombre del sitio web. 
+
+![](manuales/config_sitio.png)
+
+9. Al confirmar la configuración, inmediatamente IIS ejecutará la aplicación. Puede chequear el estatus de la aplicación llengo al enlace:
+
+```
+http://su.direccion.ip.o:5000/swagger
+```
+
+10. Lo anterior debería abrir una aplicación en la que puede comprobar el funcionamiento de la REST API.
+
+![](manuales/prueba_iis.png)
+
+11. Si no logra acceder a la aplicación desde otro computador, necesitará agregar reglas del FireWall para permitir comunicación en el puerto 5000, sine embargo, esta configuración está fuera del scope de esta guía puesto depende de su contexto de uso. Se recomienda seguir la guía en el siguiente link:
+
+<https://www.windowscentral.com/how-open-port-windows-firewall>
+
+# App Web
+
+# App Móvil

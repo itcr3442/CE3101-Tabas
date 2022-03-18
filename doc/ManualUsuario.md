@@ -36,6 +36,39 @@ nocite: |
 
 # Servidor
 
+La interacción con el servidor se da por medio de consultas http a la dirección ip del servidor en el puerto 5000. A continuación se describe como llewvar a cabo las operaciones solicitadas en la especificación. Puede probar cada una de las operaciones en la aplicación de swagger. 
+
+## **Inicio de Sesión**
+
+- `get /check_login` o `get /check_login_usuario` : Recibe un query string que contiene los valores de `cedula` y `password_hash` de un usuario. Retorna un valor JSON "success" cuyo valor es de 1 si las credenciales son correctas, y 0 de lo contrario. Si los credenciales son válidos, se espera que la aplicación cliente guarde registro de ellos y los utilice para llevar a cabo otras consultas.
+
+## **Registro de trabajadores**
+
+- `post /trabajadores`: Recibe un query string con los credenciales del usuario que registra trabajadores. Como cuerpo, recibe un objeto JSON con la siguiente estructura:
+
+```Json
+{
+    cedula	integer($int32)
+    password_hash string
+    nombre string
+    primer_apellido	string
+    segundo_apellido string
+    rol	string
+}
+```
+
+## **Registro de Usuarios**
+## **Creación de maletas**
+## **Creacuón de Bagcart**
+## **Asignación de avión a vuelo**
+## **Asignación de Bagcart a vuelo**
+## **Cierre de Bagcart**
+## **Reporte Maletas por cliente**
+## **Reporte Conciliación de maletas**
+## **Asignar/escaneo de una maleta**
+## ****
+## ****
+## ****
 
 # Aplicación Web
 

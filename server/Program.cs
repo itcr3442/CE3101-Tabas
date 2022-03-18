@@ -7,11 +7,11 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
 	app.UseSwagger();
 	app.UseSwaggerUI();
-}
+//}
 
 DataBaseState db()
 {
@@ -25,6 +25,20 @@ app.UseHttpsRedirection();
 app.MapGet("/check_login", (uint cedula, string password_hash) =>
 {
 	if (!db().trabajadores.Exists(x =>
+			x.cedula == cedula &&
+			x.password_hash == password_hash
+		))
+	{
+		return "{\"success\": 0}";
+	}
+	else
+	{
+		return "{\"success\": 1}";
+	}
+});
+app.MapGet("/check_login_user", (uint cedula, string password_hash) =>
+{
+	if (!db().usuarios.Exists(x =>
 			x.cedula == cedula &&
 			x.password_hash == password_hash
 		))
