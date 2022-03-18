@@ -58,7 +58,7 @@ export class BagCartAssignmentComponent implements OnInit {
 
       let token = this.authService.getCredentials()
 
-      let registerUrl = "vuelo_bagcart?cedula=" + token.id + "&password_hash=" + token.password
+      let registerUrl = "rel/vuelo_bagcart?cedula=" + token.id + "&password_hash=" + token.password
 
       let new_flight_bagcart_relation = {
         "id_vuelo": this.idVuelo,

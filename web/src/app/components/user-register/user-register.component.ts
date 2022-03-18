@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RepositoryService } from 'src/app/services/repository.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Workers } from 'src/app/interfaces/workers.model';
 import { Users } from 'src/app/interfaces/Users.model';
 @Component({
   selector: 'app-user-register',

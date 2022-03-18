@@ -173,4 +173,45 @@ Si la maleta es aceptada se procede a enviar otro request:
 
 # Aplicación Web
 
+La aplicación web presentará al usuario principal los métodos principales para obtener información e interactuar con el servidor y la base de datos.
+## **Inicio de Sesión**
+
+- Al entrar a la página principal, la cual se puede accesar haciendo click en el botón **"TABAS"** en la barra de navegación superior, o al entrar a alguna de las páginas que requiera estar con una sesión iniciada, se le brindará en pantalla la página de inicio de sesión donde aparecerán dos campos para ingresar la cédula del trabajador y la contraseña correspondiente. Al rellenar estos espacios y presionar el botón **"Ingresar"** que se encuentra debajo de estos, se realizará una verificación de las credenciales con el servidor. Si los valores ingresados concuerdan con lo guardado en la base de datos, se le permitirá el acceso a las páginas bloqueadas.
+
+## **Registro de Trabajadores**
+
+- Al hacer click en el botón **"Registrar Trabajadores"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de registro de trabajadores. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los trabajadores que están registrados en la base de datos, donde aparecerá la cédula, el nombre completo y el rol de cada uno. Del lado izquierdo aparecerán los espacios disponibles para registrar un nuevo trabajador, donde se ocupará introducir la cédula (número), el nombre y apellidos, contraseña y rol que va a ejecutar el trabajador. Una vez rellenados los campos correctamente con valores válidos y escogido un rol de los disponibles por el menú desplegable, se puede presionar el botón **"Registrar"** para introducir el trabajador a la base de datos (Es necesario recargar la página para actualizar los datos y que aparezca el nuevo trabajador en la lista).
+
+## **Registro de Usuarios**
+
+- Al hacer click en el botón **"Registrar Trabajadores"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de registro de usuarios. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los usuarios registrados en la base de datos, donde aparecerá la cédula, el nombre completo y el rol de cada uno. Del lado izquierdo aparecerán los espacios disponibles para registrar un nuevo usuario (actualmente no implementado).
+
+## **Registro de Maletas**
+
+- Al hacer click en el botón **"Registrar Maletas"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de registro de Maletas. En esta pantalla aparecerá del lado derecho un tabla con la lista de todas las maletas registrados en la base de datos, donde aparecerá el número de maleta, la cédula del usuario/dueño, ek núemro del vuelo al que se está asignando, su peso, el costo y su color (en decimal). Del lado izquierdo aparecerán los espacios disponibles para registrar una nueva maleta , donde se ocupará introducir la cédula del usuario dueño de esta(número), número de vuelo al que se va a monstar la maleta, el peso, el costo y el color principal de esta. Una vez rellenados los campos correctamente con valores válidos y escogido un color del *ColorPicker* disponible, se puede presionar el botón **"Registrar"** para introducir la maleta a la base de datos (Es necesario recargar la página para actualizar los datos y que aparezca la nueva maleta en la lista). Una vez realizado esto, se comenzará a descargar el archivo XML de la factura para enviarlo al Ministerio de Hacienda.
+
+## **Registro de BagCarts**
+
+- Al hacer click en el botón **"Registrar BagCart"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de registro de Maletas. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los BagCarts registrados en la base de datos, donde aparecerá los de ID de cada uno, las marcas y el modelo. Del lado izquierdo aparecerán los espacios disponibles para registrar un nuevo BagCart (actualmente no implementado).
+
+## **Asignaci+on de Avión a Vuelos**
+
+- Al hacer click en el botón **"Asignar Aviones"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de asignación de aviones a vuelos. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los tipos de aviones disponibles registrados en la base de datos, donde aparecerá el nombre de cada uno, la capacidad y la sección de bodega. En el lado izquierdo de la pantalla aparecerán los espacios disponibles para hacer la asignación de un avión a un vuelo (actualmente no implementado).
+
+## **Asignación de un BagCart a un vuelo**
+
+- Al hacer click en el botón **"Asignar BagCarts"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de asignación de Bagcarts a vuelos. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los BagCarts registrados en la base de datos, donde aparecerá los de ID de cada uno, las marcas y el modelo. Del lado izquierdo aparecerán los espacios disponibles para introducir el ID del vuelo y el ID del BagCart a asignar al vuelo. Al presionar el botón **"Registrar"** se va introducir esta relación a la base de datos del servidor.
+
+## **Cierre def BagCart**
+
+- Al hacer click en el botón **"Cerrar BagCart"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de cierre de BagCarts. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los BagCarts registrados en la base de datos, donde aparecerá los de ID de cada uno, las marcas y el modelo. En el lado izquierdo aparecerá el espacio donde es necesario introducir el ID del BagCart a cerrar en la base de datos (actualmente no implementado). 
+
+## **Cierre def BagCart**
+
+- Al hacer click en el botón **"Cerrar BagCart"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de cierre de BagCarts. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los BagCarts registrados en la base de datos, donde aparecerá los de ID de cada uno, las marcas y el modelo. En el lado izquierdo aparecerá el espacio donde es necesario introducir el ID del BagCart a cerrar en la base de datos (actualmente no implementado).
+
+## **Lista de Vuelos**
+
+- Al hacer click en el botón **"Vuelos"** de la barra de navegación superior, se le va a presentar en pantalla una página donde aparecerán todos los vuelos registrados en las bases de datos del servidor.
+
 # Aplicación Móvil

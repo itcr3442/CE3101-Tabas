@@ -19,15 +19,15 @@ const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login/redirect', component: LoginComponent },
   { path: 'planes_list', component: PlanesListComponent, canActivate: [AuthGuard] },
-  { path: 'workers_list', component: WorkersListComponent },
+  { path: 'workers_list', component: WorkersListComponent , canActivate: [AuthGuard] },
   { path: 'worker_reg', component: WorkerRegisterComponent, canActivate: [AuthGuard] },
-  { path: 'bagcarts_creation', component: BagCartCreationComponent },
-  { path: 'bagcarts_assignement', component: BagCartAssignmentComponent },
-  { path: 'close_bagcarts', component: CloseBagCartComponent },
-  { path: 'bag_creation', component: BagCreationComponent },
+  { path: 'bagcarts_creation', component: BagCartCreationComponent , canActivate: [AuthGuard] },
+  { path: 'bagcarts_assignement', component: BagCartAssignmentComponent , canActivate: [AuthGuard] },
+  { path: 'close_bagcarts', component: CloseBagCartComponent , canActivate: [AuthGuard] },
+  { path: 'bag_creation', component: BagCreationComponent ,canActivate: [AuthGuard] },
   { path: 'flight_list', component: FlightListComponent },
-  { path: 'user_register', component: UserRegisterComponent },
-  { path: 'pdf_report', component: PdfReportComponent },
+  { path: 'user_register', component: UserRegisterComponent ,canActivate: [AuthGuard] },
+  { path: 'pdf_report', component: PdfReportComponent ,canActivate: [AuthGuard] },
 ];
 
 @NgModule({
