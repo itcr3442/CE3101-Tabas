@@ -129,11 +129,14 @@ export class BagCreationComponent implements OnInit {
     const mins = d.getMinutes().toString()
     const secs = d.getSeconds().toString()
 
-    let clave = "506" + day.padStart(2, "0") + month.padStart(2, "0") + year.substring(2) + this.id.padStart(12, "0") + Math.floor(Math.random() * 10 ** 19) + "1" + Math.floor(Math.random() * 10 ** 8)
+    const clave = "506" + day.padStart(2, "0") + month.padStart(2, "0") + year.substring(2) + this.id.padStart(12, "0") + Math.floor(Math.random() * 10 ** 19) + "1" + Math.floor(Math.random() * 10 ** 8)
 
     let xmlDoc = document.implementation.createDocument(null, "FacturaElectronica");
 
     let root = xmlDoc.documentElement;
+    root.setAttribute("xmlns:ds", "http://www.w3.org/2000/09/xmldsig#");
+    root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+    root.setAttribute("xmlns", "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica");
     root.setAttribute("xsi:schemaLocation", "https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica https://cdn.comprobanteselectronicos.go.cr/xml-schemas/v4.3/facturaElectronica.xsd");
 
     let clave_node = xmlDoc.createElement("Clave")
@@ -378,7 +381,23 @@ export class BagCreationComponent implements OnInit {
     let signature_node = xmlDoc.createElement("ds:Signature")
     signature_node.setAttribute("Id", "Signature-4ed368f7-41d7-4c21-a47c-1eaeeacee7aa")
 
-    console.log("XML:" + new XMLSerializer().serializeToString(xmlDoc))
+
+    let xmltext = new XMLSerializer().serializeToString(xmlDoc)
+    xmltext = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" + xmltext
+    console.log("XML:" + xmltext)
+
+    let bb = new Blob([xmltext], { type: 'text/plain' })
+
+    var pom = document.createElement('a');
+    pom.setAttribute('href', window.URL.createObjectURL(bb));
+    pom.setAttribute('download', "FE-" + clave + ".xml");
+
+    pom.dataset['downloadurl'] = ['text/plain', pom.download, pom.href].join(':');
+    pom.draggable = true;
+    pom.classList.add('dragout');
+
+    pom.click();
+
   }
 
 }
