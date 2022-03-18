@@ -28,6 +28,9 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.logged = this.authService.isLoggedIn()
+    if (this.router.url === "/login/redirect") {
+      this.message = "Debe ingresar al sistema para poder acceder a esa página"
+    }
   }
 
   get id() {
