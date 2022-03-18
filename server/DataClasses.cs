@@ -4,7 +4,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 
-
+/// <summary>
+/// Contiene el estado de la base de datos. Esta es la estructura que se 
+/// serializa/deserializa para interactuar con el archivo JSON que contiene
+/// los datos
+/// </summary>
 public class DataBaseState
 {
 	public List<Trabajador> trabajadores { get; set; }
@@ -37,14 +41,31 @@ public class DataBaseState
 	}
 
 }
-
+/// <summary>
+/// DataClass utilizada para almacenar los datos sobre un tipo de avion.
+/// </summary>
 public class TipoAvion
 {
+	/// <summary>
+	/// Nombre del tipo de avion. Se utiliza como llave primaria. 
+	/// </summary>
+	/// <value>"Boeing 787"</value>
 	public string? nombre { get; set; }
+	/// <summary>
+	///	Indica la cantidad de maletas que puede almacenar un tipo de avion. 
+	/// </summary>
+	/// <value>23</value>
 	public uint capacidad { get; set; }
+	/// <summary>
+	///	Se refieren a los espacios destinados a maletas en el avión 
+	/// </summary>
+	/// <value>3</value>
 	public uint secciones_bodega { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar los datos sobre un avion en específico.
+/// </summary>
 public class Avion
 {
 	public uint nserie { get; set; }
@@ -52,12 +73,21 @@ public class Avion
 	public string? modelo { get; set; }
 }
 
+
+/// <summary>
+/// DataClass utilizada para almacenar los datos sobre un vuelo.
+/// </summary>
 public class Vuelo
 {
 	public uint numero { get; set; }
 	public uint avion { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para recepción de los datos necesarios para crear
+/// una instancia de un vuelo en la base de datos. No se recibe un número
+/// de vuelo pues la REST API se encarga de asignarlo para evitar conflictos
+/// </summary>
 public class VueloQData
 {
 	public uint avion { get; set; }
