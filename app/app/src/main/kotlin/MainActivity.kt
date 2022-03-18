@@ -6,13 +6,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-
 class MainActivity : AppCompatActivity() {
+  private lateinit var baseUrl: EditText
   private lateinit var username: EditText
   private lateinit var password: EditText
   private lateinit var loginError: TextView
@@ -21,31 +16,22 @@ class MainActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
 
+    baseUrl = findViewById(R.id.baseUrl);
     username = findViewById(R.id.username);
     password = findViewById(R.id.password);
     loginError = findViewById(R.id.loginError);
   }
 
-  fun login(view: View) {
+  fun login(_view: View) {
+    val baseUrl = baseUrl.text.toString()
     val username = username.text.toString()
 	val password = password.text.toString()
 
-    val retrofit = Retrofit.Builder()  
-                    .baseUrl("http://192.168.34.68:5265")  
-                    .addConverterFactory(GsonConverterFactory.create())  
-                    .build()  
-
-    val service = retrofit.create(TabasService::class.java)
-	service.checkLogin(username, password).enqueue(object : Callback<Success> {
-	  override fun onResponse(call: Call<Success>, response: Response<Success>) {
-	    if(response.body()!!.success != 1) {
-		  loginError.setVisibility(View.VISIBLE)
-		}
+    val session = Session(baseUrl, username, password)
+    session.login({ success -> run {
+	  if(!success) {
+	    loginError.setVisibility(View.VISIBLE)
 	  }
-
-	  override fun onFailure(call: Call<Success>, t: Throwable) {
-	    throw t
-	  }
-	});
+	}})
   }
 }
