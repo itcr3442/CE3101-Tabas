@@ -2,6 +2,7 @@ package cr.ac.tec.ce3101.tabas.app
 
 import android.os.Bundle
 import android.view.View
+import android.content.Intent
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,16 +23,19 @@ class MainActivity : AppCompatActivity() {
     loginError = findViewById(R.id.loginError);
   }
 
-  fun login(_view: View) {
+  fun login(view: View) {
     val baseUrl = baseUrl.text.toString()
     val username = username.text.toString()
-	val password = password.text.toString()
+    val password = password.text.toString()
 
     val session = Session(baseUrl, username, password)
     session.login({ success -> run {
-	  if(!success) {
-	    loginError.setVisibility(View.VISIBLE)
-	  }
-	}})
+      if(success) {
+        (getApplication() as TabasApp).session = session;
+        startActivity(Intent(this, OverviewActivity::class.java))
+      } else {
+        loginError.setVisibility(View.VISIBLE)
+      }
+    }})
   }
 }
