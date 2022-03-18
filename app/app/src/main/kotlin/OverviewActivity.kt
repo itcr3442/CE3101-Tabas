@@ -27,8 +27,16 @@ class OverviewActivity : AppCompatActivity() {
     setContentView(R.layout.activity_overview)
 
     pager = findViewById(R.id.viewPager)
-
     session = (getApplication() as TabasApp).session!!
+  }
+
+  override fun onResume() {
+    super.onResume()
+
+    escaneo.clear()
+    abordaje.clear()
+    ignored = 0
+
     session.maletas({ maletas -> run {
       this.maletas = maletas
       for(maleta in maletas) {
