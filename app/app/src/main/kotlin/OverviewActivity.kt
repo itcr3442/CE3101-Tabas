@@ -76,7 +76,10 @@ class OverviewActivity : AppCompatActivity() {
         startActivity(Intent(this@OverviewActivity, EscaneoActivity::class.java))
       } })
 
-      else -> ListFragment(abordaje, { id -> run {} })
+      else -> ListFragment(abordaje, { maleta -> run {
+        (getApplication() as TabasApp).maleta = maleta
+        startActivity(Intent(this@OverviewActivity, AbordajeActivity::class.java))
+	  } })
     }
   }
 }
