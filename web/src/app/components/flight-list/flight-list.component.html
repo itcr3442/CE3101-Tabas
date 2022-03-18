@@ -1,0 +1,20 @@
+<div>
+    <div class="col-md-6">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Avión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor = "let flight of flights_list" >
+                        <td>{{flight.numero}}</td>
+                        <td>{{flight.avion}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> 
+</div>

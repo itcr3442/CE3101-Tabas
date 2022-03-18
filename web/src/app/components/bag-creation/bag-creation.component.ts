@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Bags } from 'src/app/interfaces/Bags.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { RepositoryService } from 'src/app/services/repository.service';
+import { BagsListComponent } from '../bags-list/bags-list.component';
 
 @Component({
   selector: 'app-bag-creation',
@@ -10,6 +12,9 @@ import { RepositoryService } from 'src/app/services/repository.service';
   styleUrls: ['./bag-creation.component.css']
 })
 export class BagCreationComponent implements OnInit {
+
+  public bags_list!: Bags[];
+
   registerForm = new FormGroup({
     id: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')]),
     nvuelo: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')]),
@@ -27,6 +32,7 @@ export class BagCreationComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAllBags();
   }
 
   get id() {
@@ -50,6 +56,16 @@ export class BagCreationComponent implements OnInit {
     return this.registerForm.controls['color'].value
   }
 
+  public getAllBags = () =>{
+    let registerUrl = "maletas"
+    this.repo.getData(registerUrl)
+    .subscribe(res => {
+        console.log("Result:" + JSON.stringify(res));
+        this.bags_list = res as Bags[];
+      }
+    )
+  }
+
   onSubmit() {
     if (this.registerForm.valid) {
 
@@ -60,7 +76,7 @@ export class BagCreationComponent implements OnInit {
 
       let token = this.authService.getCredentials()
 
-      let registerUrl = "trabajadores?cedula=" + token.id + "&password_hash=" + token.password
+      let registerUrl = "maletas?cedula=" + token.id + "&password_hash=" + token.password
 
       let new_bag = {
         "cedula_usuario": this.id,

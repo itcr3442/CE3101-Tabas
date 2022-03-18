@@ -8,6 +8,8 @@ import { WorkersListComponent } from './components/workers-list/workers-list.com
 import { WorkerRegisterComponent } from './components/worker-register/worker-register.component';
 import { BagCreationComponent } from './components/bag-creation/bag-creation.component';
 import { AuthGuard } from './guards/auth.guard';
+import { BagCartCreationComponent } from './components/bag-cart-creation/bag-cart-creation.component';
+import { FlightListComponent } from './components/flight-list/flight-list.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -16,9 +18,10 @@ const routes: Routes = [
   { path: 'workers_list', component: WorkersListComponent },
   { path: 'worker_reg', component: WorkerRegisterComponent, canActivate: [AuthGuard] },
   { path: 'worker_reg', component: WorkerRegisterComponent, canActivate: [AuthGuard] },
-  { path: 'bagcarts_list', component: BagcartsListComponent },
+  { path: 'bagcarts_lcreation', component: BagCartCreationComponent },
   { path: 'bags_list', component: BagsListComponent },
   { path: 'bag_creation', component: BagCreationComponent },
+  { path: 'flight_list', component: FlightListComponent },
 ];
 
 @NgModule({
