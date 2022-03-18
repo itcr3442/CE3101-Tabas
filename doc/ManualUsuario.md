@@ -1,7 +1,7 @@
 ---
 title:
   Instituto Tecnológico de Costa Rica\endgraf\bigskip \endgraf\bigskip\bigskip\
-  Resumen Ejecutivo Avance 1 \endgraf\bigskip\bigskip\bigskip\bigskip
+  Manual de Usuario Sistema Tabas \endgraf\bigskip\bigskip\bigskip\bigskip
 author:
   - José Morales Vargas, carné 2019024270
   - Alejandro Soto Chacón, carné 2019008164
@@ -34,9 +34,10 @@ nocite: |
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-# Tarea Corta 1
+# Servidor
 
-## Bibliografía
 
-::: {#refs}
-:::
+# Aplicación Web
+
+
+# Aplicación Móvil

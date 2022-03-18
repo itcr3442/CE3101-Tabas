@@ -1,7 +1,7 @@
 ---
 title:
   Instituto Tecnológico de Costa Rica\endgraf\bigskip \endgraf\bigskip\bigskip\
-  Resumen Ejecutivo Avance 2 \endgraf\bigskip\bigskip\bigskip\bigskip
+  Documento Minutas Tarea Corta 1 \endgraf\bigskip\bigskip\bigskip\bigskip
 author:
   - José Morales Vargas, carné 2019024270
   - Alejandro Soto Chacón, carné 2019008164
@@ -28,15 +28,3 @@ nocite: |
 \maketitle
 \thispagestyle{empty}
 \clearpage
-\tableofcontents
-\pagenumbering{roman}
-\clearpage
-\pagenumbering{arabic}
-\setcounter{page}{1}
-
-# Tarea Corta 1
-
-## Bibliografía
-
-::: {#refs}
-:::
