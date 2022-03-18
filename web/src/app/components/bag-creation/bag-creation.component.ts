@@ -93,25 +93,25 @@ export class BagCreationComponent implements OnInit {
 
       console.log("POST url: " + registerUrl)
 
-      // this.repo.create(
-      //   registerUrl, new_bag).subscribe(res => {
-      //     console.log("post result: " + JSON.stringify(res))
+      this.repo.create(
+        registerUrl, new_bag).subscribe(res => {
+          console.log("post result: " + JSON.stringify(res))
 
-      //     if ((<any>res).success === 1) {
-      //       console.log("Bag register successful");
-      //       this.message = ""
-      this.generateXML(this.id, this.costo, this.peso)
-      //   }
-      //   else if ((<any>res).success === -1) {
-      //     this.message = "La maleta ya existe o su usuario no es válido.";
-      //   } else if ((<any>res).success === -2) {
-      //     this.message = "La cédula ingresada no está registrada para ningún usuario en el sistema.";
-      //   }
-      //   else {
-      //     this.message = "Código de error desconocido: " + (<any>res).success;
-      //   }
-      // }
-      //)
+          if ((<any>res).success === 1) {
+            console.log("Bag register successful");
+            this.message = ""
+            this.generateXML(this.id, this.costo, this.peso)
+          }
+          else if ((<any>res).success === -1) {
+            this.message = "La maleta ya existe o su usuario no es válido.";
+          } else if ((<any>res).success === -2) {
+            this.message = "La cédula ingresada no está registrada para ningún usuario en el sistema.";
+          }
+          else {
+            this.message = "Código de error desconocido: " + (<any>res).success;
+          }
+        }
+        )
 
 
     }
