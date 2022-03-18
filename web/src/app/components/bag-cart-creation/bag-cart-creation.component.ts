@@ -14,8 +14,8 @@ export class BagCartCreationComponent implements OnInit {
   public bagcarts_list!: BagCarts[];
 
   registerForm = new FormGroup({
-    idvuelo: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')]),
-    idbagcart: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')])
+    marca: new FormControl('', [Validators.required]),
+    modelo: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')])
   })
 
   message: string = ""
@@ -30,12 +30,12 @@ export class BagCartCreationComponent implements OnInit {
     this.getAllBagCarts();
   }
 
-  get idVuelo() {
-    return this.registerForm.controls['idvuelo'].value
+  get marca() {
+    return this.registerForm.controls['marca'].value
   }
 
-  get idBagCart() {
-    return this.registerForm.controls['idbagcart'].value
+  get modelo() {
+    return this.registerForm.controls['modelo'].value
   }
 
   public getAllBagCarts = () =>{
@@ -49,43 +49,7 @@ export class BagCartCreationComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.registerForm.valid) {
-
-      if (!this.authService.isLoggedIn()) {
-        this.router.navigate(['/login/redirect']);
-        return
-      }
-
-      let token = this.authService.getCredentials()
-
-      let registerUrl = "vuelo_bagcart?cedula=" + token.id + "&password_hash=" + token.password
-
-      let new_flight_bagcart_relation = {
-        "id_vuelo": this.idVuelo,
-        "id_bagcart": this.idBagCart
-      }
-
-      console.log("New flight/bagcart relation: " + JSON.stringify(new_flight_bagcart_relation))
-
-
-      console.log("POST url: " + registerUrl)
-      this.repo.create(
-        registerUrl, new_flight_bagcart_relation).subscribe(res => {
-          console.log("post result: " + JSON.stringify(res))
-          if ((<any>res).success === 1) {
-            console.log("Register successful");
-            this.message = ""
-          }
-          else if ((<any>res).success === 0) {
-            this.message = "Sus credenciales no son válidos, o este bag cart ya está registrado en el sistema";
-          } 
-        }
-        )
-    }
-    else {
-      this.message = "Por favor verifique que ingresó todos los campos correctamente";
-    }
+    this.message = "No implementado"
   }
-
 }
 
