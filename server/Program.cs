@@ -614,11 +614,8 @@ app.MapGet("/rel/vuelo_bagcart/bagcart/{id}", (uint id) =>
 /// </summary>
 app.MapGet("/rel/vuelo_bagcart/vuelo/{id}", (uint id) =>
 {
-<<<<<<< Updated upstream
     return JsonSerializer.Serialize(db().rel_vuelo_bagcart.FindAll((x) => x.id_vuelo.Equals(id)));
-=======
-    return JsonSerializer.Serialize(db().rel_vuelo_bagcart.Find((x) => x.id_vuelo.Equals(id)));
->>>>>>> Stashed changes
+
 });
 
 /// <summary>
