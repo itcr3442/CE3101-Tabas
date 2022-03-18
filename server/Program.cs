@@ -21,18 +21,9 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
 app.UseSwagger();
 app.UseSwaggerUI();
-//}
 app.UseCors();
-
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
 
 DataBaseState db()
 {
@@ -43,6 +34,9 @@ db();
 
 //app.UseHttpsRedirection();
 
+/// <summary>
+/// GET que permite comprobar los credenciales de un trabajador.
+/// </summary>
 app.MapGet("/check_login", (uint cedula, string password_hash) =>
 {
 	if (!db().trabajadores.Exists(x =>
@@ -57,6 +51,9 @@ app.MapGet("/check_login", (uint cedula, string password_hash) =>
 		return "{\"success\": 1}";
 	}
 });
+/// <summary>
+/// GET que permite confirmar los credenciales de un usario.
+/// </summary>
 app.MapGet("/check_login_user", (uint cedula, string password_hash) =>
 {
 	if (!db().usuarios.Exists(x =>
@@ -71,7 +68,9 @@ app.MapGet("/check_login_user", (uint cedula, string password_hash) =>
 		return "{\"success\": 1}";
 	}
 });
-
+/// <summary>
+/// GET que obtiene la lista de trabajadores con contraseñas ofuscadas
+/// </summary>
 app.MapGet("/trabajadores", (uint cedula_admin, string password_hash) =>
 {
 	if (!db().trabajadores.Exists(
@@ -102,6 +101,9 @@ app.MapGet("/trabajadores", (uint cedula_admin, string password_hash) =>
 	}
 });
 
+/// <summary>
+///	GET que permite obtener los datos de un trabajador en particular 
+/// </summary>
 app.MapGet("/trabajadores/{cedula}", (uint cedula, uint cedula_admin, string password_hash) =>
 {
 	if (!db().trabajadores.Exists(x =>
@@ -118,8 +120,13 @@ app.MapGet("/trabajadores/{cedula}", (uint cedula, uint cedula_admin, string pas
 	}
 });
 
+/// <summary>
+/// POST para la creación de trabajadores en la base de datos
+/// </summary>
 app.MapPost("/trabajadores", (uint cedula, string password_hash, Trabajador trabajador) =>
 {
+	// diferentes causas de fallo resultan en distintos código de error
+	// retornados al consumidor del servicio
 	if (db().trabajadores.Exists(x => x.cedula == trabajador.cedula))
 	{
 		return "{\"success\": -1}";
@@ -145,7 +152,9 @@ app.MapPost("/trabajadores", (uint cedula, string password_hash, Trabajador trab
 		return "{\"success\": 1}";
 	}
 });
-
+/// <summary>
+/// GET que obtiene la lista de usuarios del servicio
+/// </summary>
 app.MapGet("/usuarios", () =>
 {
 	List<Usuario> x = new List<Usuario>();
@@ -160,6 +169,9 @@ app.MapGet("/usuarios", () =>
 	return x;
 });
 
+/// <summary>
+/// GET que permite obtener la información de un usuario en específico
+/// </summary>
 app.MapGet("/usuarios/{cedula}", (uint cedula) =>
 {
 	return JsonSerializer.Serialize(db().usuarios.Find((x) => x.cedula.Equals(cedula)));
@@ -184,6 +196,9 @@ app.MapPost("/usuarios", (uint cedula, string password_hash, Usuario user) =>
 	}
 });
 
+/// <summary>
+///	GET que permite obtener la lista de todas las maletas registradas 
+/// </summary>
 app.MapGet("/maletas", () =>
 {
 	return db().maletas;
@@ -224,22 +239,33 @@ app.MapPost("/maletas", (uint cedula, string password_hash, MaletaQData data) =>
 		return $"{{\"numero\": {numero}, \"success\": 1}}";
 	}
 });
-
+/// <summary>
+/// GET para conseguir información de una maleta de un número específico
+/// </summary>
 app.MapGet("/maletas/info/{numero}", (uint numero) =>
 {
 	return JsonSerializer.Serialize(db().maletas.Find((maleta) => maleta.numero.Equals(numero)));
 });
 
+/// <summary>
+/// GET para conseguir todas las maletas  de un usuario
+/// </summary>
 app.MapGet("/maletas/usuario/{cedula}", (uint cedula) =>
 {
-	return JsonSerializer.Serialize(db().maletas.Find((maleta) => maleta.cedula_usuario.Equals(cedula)));
+	return JsonSerializer.Serialize(db().maletas.FindAll((maleta) => maleta.cedula_usuario.Equals(cedula)));
 });
 
+/// <summary>
+/// GET para obtener la lista de todos los bagcarts registrados
+/// </summary>
 app.MapGet("/bagcarts", () =>
 {
 	return db().bagcarts;
 });
 
+/// <summary>
+/// POST para la creación de un bagcart en la base de datos
+/// </summary>
 app.MapPost("/bagcarts", (uint cedula, string password_hash, BagCartQData data) =>
 {
 	uint id = 0;
@@ -264,17 +290,25 @@ app.MapPost("/bagcarts", (uint cedula, string password_hash, BagCartQData data) 
 		return $"{{\"id\": {id}, \"success\": 1}}";
 	}
 });
-
+/// <summary>
+/// GET para obtener información de un bagcart en específico a partir del id
+/// </summary>
 app.MapGet("/bagcarts/info/{id}", (uint id) =>
 {
 	return JsonSerializer.Serialize(db().bagcarts.Find((x) => x.id.Equals(id)));
 });
 
+/// <summary>
+/// GET para obtener la lista de todos los tipos de avion
+/// </summary>
 app.MapGet("/tipo_avion", () =>
 {
 	return db().tipos_avion;
 });
 
+/// <summary>
+/// POST para la agregar un tipo de avion a la base de datos
+/// </summary>
 app.MapPost("/tipos_avion", (uint cedula, string password_hash, TipoAvion data) =>
 {
 
@@ -294,16 +328,25 @@ app.MapPost("/tipos_avion", (uint cedula, string password_hash, TipoAvion data) 
 	}
 });
 
+/// <summary>
+/// GET para obtener la información de un tipo de avion en específico
+/// </summary>
 app.MapGet("/tipos_avion/{nombre}", (string nombre) =>
 {
 	return JsonSerializer.Serialize(db().tipos_avion.Find((x) => x.nombre == nombre));
 });
 
+/// <summary>
+/// GET para obtener la lista de todos los vuelos registrados
+/// </summary>
 app.MapGet("/vuelos", () =>
 {
 	return db().vuelos;
 });
 
+/// <summary>
+/// POST para el registro de un nuevo vuelo en la base de datos
+/// </summary>
 app.MapPost("/vuelos", (uint cedula, string password_hash, VueloQData data) =>
 {
 	uint numero = 0;
@@ -329,16 +372,25 @@ app.MapPost("/vuelos", (uint cedula, string password_hash, VueloQData data) =>
 	}
 });
 
+/// <summary>
+/// GET para obtener la información de un vuelo en específico en base a su número
+/// </summary>
 app.MapGet("/vuelos/info/{numero}", (int numero) =>
 {
 	return JsonSerializer.Serialize(db().vuelos.Find((x) => x.numero.Equals(numero)));
 });
 
+/// <summary>
+/// GET para obtener la lista de todos los registros de maletas escaneadas con rayos x
+/// </summary>
 app.MapGet("/rel/scan_rayosx_maleta", () =>
 {
 	return db().rel_scan_rayosx_maleta;
 });
 
+/// <summary>
+/// POST para registrar un resultado de un escaneo con rayos x de una maleta
+/// </summary>
 app.MapPost("/rel/scan_rayosx_maleta", (string password_hash, RelScanRayosXMaleta data) =>
 {
 
@@ -357,21 +409,33 @@ app.MapPost("/rel/scan_rayosx_maleta", (string password_hash, RelScanRayosXMalet
 	}
 });
 
+/// <summary>
+/// GET para obtener un registro de scan de de rayos x de una maleta en base a su numero
+/// </summary>
 app.MapGet("/rel/scan_rayosx_maleta/maleta/{numero}", (uint numero) =>
 {
 	return JsonSerializer.Serialize(db().rel_scan_rayosx_maleta.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
+/// <summary>
+/// GET para obtener la lista de todas las maletas escaneadas en rayos x por un trabajador
+/// </summary>
 app.MapGet("/rel/scan_rayosx_maleta/trabajador/{cedula}", (uint cedula) =>
 {
-	return JsonSerializer.Serialize(db().rel_scan_rayosx_maleta.Find((x) => x.cedula_trabajador.Equals(cedula)));
+	return JsonSerializer.Serialize(db().rel_scan_rayosx_maleta.FindAll((x) => x.cedula_trabajador.Equals(cedula)));
 });
 
+/// <summary>
+/// GET que Obtiene la lista de todos los registros que asocian una maleta a un bagcart
+/// </summary>
 app.MapGet("/rel/maleta_bagcart", () =>
 {
 	return db().rel_maleta_bagcart;
 });
 
+/// <summary>
+/// POST para crear un nuevo registro de asociación entre una maleta y un bagcart
+/// </summary>
 app.MapPost("/rel/maleta_bagcart", (uint cedula, string password_hash, RelMaletaBagCart data) =>
 {
 
@@ -395,21 +459,35 @@ app.MapPost("/rel/maleta_bagcart", (uint cedula, string password_hash, RelMaleta
 	}
 });
 
+/// <summary>
+/// GET para obtener la información de asociación de una maleta a un bagcart en base
+/// al numero de la maleta
+/// </summary>
 app.MapGet("/rel/maleta_bagcart/maleta/{numero}", (uint numero) =>
 {
 	return JsonSerializer.Serialize(db().rel_maleta_bagcart.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
+/// <summary>
+/// GET para obtener la información de asociación de varias maletas a un bagcart
+/// en base al id del bagcart 
+/// </summary>
 app.MapGet("/rel/maleta_bagcart/bagcart/{id}", (uint id) =>
 {
-	return JsonSerializer.Serialize(db().rel_maleta_bagcart.Find((x) => x.id_bagcart.Equals(id)));
+	return JsonSerializer.Serialize(db().rel_maleta_bagcart.FindAll((x) => x.id_bagcart.Equals(id)));
 });
 
+/// <summary>
+/// GET que obtiene la lista de todas las maletas que han sido escaneadas y abordadas en un vuelo
+/// </summary>
 app.MapGet("/rel/scan_asignacion_maleta", () =>
 {
 	return db().rel_scan_asignacion_maleta;
 });
 
+/// <summary>
+/// POST que permite crear el registro de que se ha escaneado y abordado una maleta en un vuelo
+/// </summary>
 app.MapPost("/rel/scan_asignacion_maleta", (string password_hash, RelScanAsignacionMaleta data) =>
 {
 
@@ -424,23 +502,33 @@ app.MapPost("/rel/scan_asignacion_maleta", (string password_hash, RelScanAsignac
 	else
 	{
 		//remover maleta del bagcart al pasarla al avion
-		db().rel_maleta_bagcart.RemoveAll((reg) => reg.numero_maleta.Equals(data.numero_maleta));
+		//db().rel_maleta_bagcart.RemoveAll((reg) => reg.numero_maleta.Equals(data.numero_maleta));
 		db().rel_scan_asignacion_maleta.Add(data);
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
 });
 
+/// <summary>
+/// GET que obtiene la información de abordaje de una maleta en base a su número,
+/// asumiendo que la maleta ya ha sido abordada
+/// </summary>
 app.MapGet("/rel/scan_asignacion_maleta/maleta/{numero}", (uint numero) =>
 {
 	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.Find((x) => x.numero_maleta.Equals(numero)));
 });
 
+/// <summary>
+/// GET que permite obtener todas las maletas que ha escaneado y abordado un trabajador
+/// </summary>
 app.MapGet("/rel/scan_asignacion_maleta/trabajador/{cedula}", (uint cedula) =>
 {
-	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.Find((x) => x.cedula_trabajador.Equals(cedula)));
+	return JsonSerializer.Serialize(db().rel_scan_asignacion_maleta.FindAll((x) => x.cedula_trabajador.Equals(cedula)));
 });
 
+/// <summary>
+/// GET que permite obtener la lista de todas las maletas que han sido embarcadas en un vuelo
+/// </summary>
 app.MapGet("/rel/scan_asignacion_maleta/vuelo/{numero}", (uint numero) =>
 {
 	var maletas = db().maletas.FindAll(x => x.numero == numero);
@@ -450,11 +538,18 @@ app.MapGet("/rel/scan_asignacion_maleta/vuelo/{numero}", (uint numero) =>
 	)));
 });
 
+/// <summary>
+/// GET que obtiene la lista de todos los registros de asociación entre un bagcart y un vuelo
+/// </summary>
+/// <value></value>
 app.MapGet("/rel/vuelo_bagcart", () =>
 {
 	return db().rel_vuelo_bagcart;
 });
 
+/// <summary>
+/// POST que permite crear un registro de asociación entre un bagcart y un vuelo
+/// </summary>
 app.MapPost("/rel/vuelo_bagcart", (uint cedula, string password_hash, QRelVueloBagCart data) =>
 {
 	var reg = new RelVueloBagCart
@@ -478,6 +573,10 @@ app.MapPost("/rel/vuelo_bagcart", (uint cedula, string password_hash, QRelVueloB
 		return "{\"success\": 1}";
 	}
 });
+
+/// <summary>
+/// POST que permite comunicar que se debe cerrar un bagcart 
+/// </summary>
 app.MapPost("/rel/vuelo_bagcart/cierre/bagcart/{id}", (uint id, uint cedula, string password_hash, string sello) =>
 {
 	var x = db().rel_vuelo_bagcart.Find(x => x.id_bagcart == id);
@@ -497,21 +596,34 @@ app.MapPost("/rel/vuelo_bagcart/cierre/bagcart/{id}", (uint id, uint cedula, str
 	}
 });
 
+/// <summary>
+/// GET que permite obtener la relación de un bagcart a un vuelo en base
+/// al id del bagcart 
+/// </summary>
 app.MapGet("/rel/vuelo_bagcart/bagcart/{id}", (uint id) =>
 {
 	return JsonSerializer.Serialize(db().rel_vuelo_bagcart.Find((x) => x.id_bagcart.Equals(id)));
 });
 
+/// <summary>
+/// GET que permite obtener la lista de todos los bagcarts asociados a un vuelo
+/// </summary>
 app.MapGet("/rel/vuelo_bagcart/vuelo/{id}", (uint id) =>
 {
-	return JsonSerializer.Serialize(db().rel_vuelo_bagcart.Find((x) => x.id_vuelo.Equals(id)));
+	return JsonSerializer.Serialize(db().rel_vuelo_bagcart.FindAll((x) => x.id_vuelo.Equals(id)));
 });
 
+/// <summary>
+/// GET Permite obtener un registro de asociación de un bagcart a un vuelo en base al sello del bagcart
+/// </summary>
 app.MapGet("/rel/vuelo_bagcart/sello/{sello}", (string sello) =>
 {
 	return JsonSerializer.Serialize(db().rel_vuelo_bagcart.Find((x) => x.sello.Equals(sello))); ;
 });
 
+/// <summary>
+/// GET que obtiene los datos necesarios para el reporte de maletas por cliente
+/// </summary>
 app.MapGet("/reportes/maletas_x_cliente/{cedula}", (uint cedula) =>
 {
 	var result = "";
@@ -526,6 +638,10 @@ app.MapGet("/reportes/maletas_x_cliente/{cedula}", (uint cedula) =>
 	return result;
 });
 
+/// <summary>
+/// GET que obtiene los datos necesarios para el reporte de conciliación de maletas
+/// de un vuelo en específico 
+/// </summary>
 app.MapGet("/reportes/conciliacion_maletas/{nvuelo}", (uint nvuelo) =>
 {
 	var result = "";
