@@ -87,6 +87,8 @@ public sealed class DataBaseSingleton
 				new Maleta{numero = 2, cedula_usuario=11113341, color=0x23123, peso=2.0M,costo_envio=3.0M, nvuelo=0},
 				new Maleta{numero = 3, cedula_usuario=65563331, color=0x1223, peso=2.0M,costo_envio=3.0M, nvuelo=1},
 				new Maleta{numero = 4, cedula_usuario=65563331, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=1},
+				new Maleta{numero = 5, cedula_usuario=65563331, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=1},
+				new Maleta{numero = 6, cedula_usuario=112312, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=0},
 
 			};
 			foreach (var item in n){
@@ -108,6 +110,7 @@ public sealed class DataBaseSingleton
 				new RelMaletaBagCart{numero_maleta = 1, id_bagcart = 1},
 				new RelMaletaBagCart{numero_maleta = 3, id_bagcart = 0},
 				new RelMaletaBagCart{numero_maleta = 4, id_bagcart = 0},
+				new RelMaletaBagCart{numero_maleta = 6, id_bagcart = 1},
 			};
 			foreach (var item in rmb){
 				database.rel_maleta_bagcart.Add(item);
@@ -117,13 +120,14 @@ public sealed class DataBaseSingleton
 				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 1, aceptada = true, comentarios = ""},
 				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 2,aceptada = false, comentarios = "peligroso"},
 				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 3, aceptada = true, comentarios = ""},
-				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 4, aceptada = true, comentarios = ""}
+				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 4, aceptada = true, comentarios = ""},
+				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 6, aceptada = true, comentarios = ""}
 			};
 			foreach (var item in rsx) {
 				database.rel_scan_rayosx_maleta.Add(item);
 			}
 			RelVueloBagCart[] rvb = {
-				new RelVueloBagCart{id_bagcart = 0, id_vuelo = 1},
+				new RelVueloBagCart{id_bagcart = 0, id_vuelo = 1, sello = "asdasdasd2123"},
 				new RelVueloBagCart{id_bagcart = 1, id_vuelo = 0, sello = "asdasdasdadas"},
 				new RelVueloBagCart{id_bagcart = 2, id_vuelo = 0},
 				new RelVueloBagCart{id_bagcart = 3, id_vuelo = 0},
