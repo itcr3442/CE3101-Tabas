@@ -12,20 +12,20 @@
                     <input type="text" formControlName="nvuelo" class="form-control">
                 </div>
                 <div class="mb-3 form-group">
-                    <label>Primer Apellido</label>
+                    <label>Peso</label>
                     <input type="text" formControlName="peso" class="form-control">
                 </div>
                 <div class="mb-3 form-group">
                     <label>Costo</label>
                     <input type="text" formControlName="costo" class="form-control">
                 </div>
-    
+
                 <div class="mb-3 form-group">
                     <label>Color</label>
                     <input class="form-control" [value]="color" [(colorPicker)]="color" [style.background]="color"
                         (colorPickerChange)="color" />
                 </div>
-    
+
                 <ng-container *ngIf="this.message">
                     <p>
                         {{this.message}}
@@ -58,7 +58,7 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
         </div>
-    </div>
 
-</div>
+    </div>

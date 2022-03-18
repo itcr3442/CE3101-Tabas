@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Flights } from 'src/app/interfaces/Fligths.model';
+import { Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RepositoryService } from 'src/app/services/repository.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Flights } from '../../interfaces/Fligths.model';
 
 @Component({
   selector: 'app-flight-list',
