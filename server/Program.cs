@@ -41,7 +41,7 @@ DataBaseState db()
 
 db();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.MapGet("/check_login", (uint cedula, string password_hash) =>
 {
