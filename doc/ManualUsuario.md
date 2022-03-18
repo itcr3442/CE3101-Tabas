@@ -119,16 +119,58 @@ El número de bagcart se retorna en el objeto de respuesta a la consulta.
 {
     id_vuelo	integer($int32)
     id_bagcart	integer($int32)
-    sello	string
 }
 ```
 
 ## **Cierre de Bagcart**
+
+- `post /rel/vuelo_bagcart/cierre/bagcart/{id}`: En el query string se dan las credenciales del trabajador que cerrará el bagcart y el valor del sello del bagcart. En la ruta recibe el id del bagcart a cerrar. El bagcart a cerrar debe estar previamente asignado a un vuelo. 
+
 ## **Reporte Maletas por cliente**
+
+- `get /reportes/maletas_x_cliente/{cedula}`: Recibe una ruta con la cedula del cliente. Retorna los datos del usuario y la lista de sus maletas.
+
 ## **Reporte Conciliación de maletas**
-## **Asignar/escaneo de una maleta a un bagcart**
-## **Rechazo de una Maleta**
+
+- `get /reportes/conciliacion_maletas/{nvuelo}`: Recibe una ruta con el número de vuelo y retorna los datos necesarios para el reporte solicitado. 
+
+## **Asignar/escaneo de una maleta a un bagcart y rechazo de una maleta**
+
+- `post /rel/scan_rayosx_maleta`: Recibe el pase del trabajador(la cédula va implícita en el cuerpo de mensaje) que reliza el escaneo y un objeto JSON con la siguiente estructura:
+
+```JSON
+{
+    cedula_trabajador	integer($int32)
+    numero_maleta	integer($int32)
+    aceptada	boolean
+    comentarios	string
+}
+```
+
+- El valor del campo "aceptada" indica si la maleta fue rechazada o aceptada en el paso de scan.
+
+Si la maleta es aceptada se procede a enviar otro request:
+
+- `post /rel/maleta_bagcart`: Recibe las credenciales de quien asigna una maleta al bagcart y un objeto JSON con la siguiente estructura:
+
+```JSON
+{
+    numero_maleta	integer($int32)
+    id_bagcart	integer($int32)
+}
+```
+
 ## **Asignación de maletas a un avion**
+
+- `post /rel/scan_asignacion_maleta`: Recibe el pase del trabajador que escanea una maleta y la sube al avion en el query string. El resto de los datos necesarios para realizar la tarea se envían en un objeto JSON con la siguiente estructura: 
+
+
+```JSON
+{
+    cedula_trabajador	integer($int32)
+    numero_maleta	integer($int32)
+}
+```
 
 # Aplicación Web
 
