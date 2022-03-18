@@ -43,7 +43,6 @@ Requisitos previos:
 
 Pasos de instalación:
 
-
 1. En primer lugar debe instalar instalar el SDK de .NET Core para tener acceso a las herramientas de `dotnet`. Los paquetes de instalación se pueden conseguir en el link provisto anteriormente.
 
 2. Instale el `Hosting Bundle` de Runtime de ASP .NET Core  <https://dotnet.microsoft.com/en-us/download/dotnet/6.0> el cual permite correr aplicaciones de .NET Core en IIS.
@@ -84,4 +83,14 @@ http://su.direccion.ip.o:5000/swagger
 
 # App Web
 
+1. Suponiendo que ya tiene IIS configurado y con el servidor corriendo, tan solo cree otro sitio o aplicación web de su preferencia en IIS. De igual manera al caso anterior, mucho dependerá de su contexto, en el caso particular de este manual, solo se agregará la aplicación web al sitio ya creado para el servidor.
+
+2. Las mismas reglas aplican para este despliegue que para el despliegue de servidor - esto incluye el paso de configuración de las credenciales de acuerdo a sus necesidades. Para el contexto de este manual se utilizará el usuario "Todos".
+
 # App Móvil
+
+Se provee un archivo .apk que facilita la instalación de la aplicación en un celular android.
+
+1. Ejecute el archivo.
+2. Ante la solicitud de permisos de instalación presione en aceptar.
+3. La aplicación debería aparecer ahora disponible para ser ejecutada. 
