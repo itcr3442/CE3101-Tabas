@@ -6,7 +6,7 @@
     "paths": {
       "@environments/*": [
         "environments/*"
-      ]
+      ],
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
