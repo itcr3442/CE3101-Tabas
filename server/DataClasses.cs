@@ -93,12 +93,18 @@ public class VueloQData
 	public uint avion { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar los datos sobre un rol.
+/// </summary>
 public class Rol
 {
 	public string? nombre { get; set; }
 	public string? descripcion { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar los datos de un trabajador
+/// </summary>
 public class Trabajador
 {
 	public uint cedula { get; set; }
@@ -111,6 +117,9 @@ public class Trabajador
 
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar los datos de un usuario.
+/// </summary>
 public class Usuario
 {
 	public uint cedula { get; set; }
@@ -121,6 +130,9 @@ public class Usuario
 	public uint telefono { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar los datos de una maleta
+/// </summary>
 public class Maleta
 {
 	public uint numero { get; set; }
@@ -131,6 +143,9 @@ public class Maleta
 	public uint nvuelo { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar los datos de un post request para crear una maleta.
+/// </summary>
 public class MaletaQData
 {
 	public uint cedula_usuario { get; set; }
@@ -140,6 +155,9 @@ public class MaletaQData
 	public decimal costo_envio { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar los datos de un bagcart.
+/// </summary>
 public class BagCart
 {
 	public uint id { get; set; }
@@ -154,6 +172,9 @@ public class BagCart
 	}
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar los datos de un request para crear un bagcart.
+/// </summary>
 public class BagCartQData
 {
 	public string marca { get; set; }
@@ -164,6 +185,9 @@ public class BagCartQData
 	}
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar un registro sobre el estado de scan de rayos x de una maleta.
+/// </summary>
 public class RelScanRayosXMaleta
 {
 
@@ -173,6 +197,9 @@ public class RelScanRayosXMaleta
 	public string? comentarios { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar un registro sobre el estado de scan y abordaje a un vuelo de una maleta.
+/// </summary>
 public class RelScanAsignacionMaleta
 {
 
@@ -180,6 +207,9 @@ public class RelScanAsignacionMaleta
 	public uint numero_maleta { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar un registro de que una maleta se encuentra en un bagacrt específico.
+/// </summary>
 public class RelMaletaBagCart
 {
 
@@ -187,6 +217,9 @@ public class RelMaletaBagCart
 	public uint id_bagcart { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para almacenar un registro sobre qué vuelo le corresponde a un bagcart.
+/// </summary>
 public class RelVueloBagCart
 {
 
@@ -200,12 +233,18 @@ public class RelVueloBagCart
 	}
 }
 
+/// <summary>
+/// DataClass utilizada para recibir un request que crea un registro sobre qué vuelo le corresponde a un bagcart.
+/// </summary>
 public class QRelVueloBagCart
 {
 	public uint id_vuelo { get; set; }
 	public uint id_bagcart { get; set; }
 }
 
+/// <summary>
+/// DataClass utilizada para serialización de los datos correspondiente al reporte de maletas por cliente.
+/// </summary>
 public class MaletasXCliente
 {
 	public List<Maleta> maletas { get; set; }
@@ -217,6 +256,9 @@ public class MaletasXCliente
 	}
 }
 
+/// <summary>
+/// DataClass utilizada para serialización de los datos correspondiente al reporte de conciliación de maletas.
+/// </summary>
 public class ConciliacionMaletas
 {
 	public uint numero_vuelo { get; set; }

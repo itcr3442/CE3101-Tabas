@@ -1,6 +1,9 @@
 namespace server;
 using System.Text.Json;
 
+/// <summary>
+/// Singleton que evita acceso múltiple a los datos de la base de datos
+/// </summary>
 public sealed class DataBaseSingleton
 {
 	public DataBaseState database { get; set; }
@@ -14,6 +17,7 @@ public sealed class DataBaseSingleton
 		string filepath = Environment.CurrentDirectory + "/Data.json";
 		if (!File.Exists(filepath))
 		{
+            // se crean algunos datos iniciales para poder interactuar con la base de datos
 			database = new DataBaseState();
 			Trabajador[] x = {
 				new Trabajador{ cedula = 42069, password_hash = "cusadmin", nombre = "admin",
@@ -83,6 +87,7 @@ public sealed class DataBaseSingleton
 	}
 	public void save_state()
 	{
+        // se toma el estado actual y se guarda en el archivo Data.json 
 		var options = new JsonSerializerOptions { WriteIndented = true };
 		string jsonString = JsonSerializer.Serialize(database, options);
 		File.WriteAllText(Environment.CurrentDirectory + "/Data.json", jsonString);
