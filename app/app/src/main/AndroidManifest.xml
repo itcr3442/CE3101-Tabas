@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <application android:label="Tabas"
                  android:name=".TabasApp"
-                 android:theme="@style/Theme.AppCompat"
+                 android:theme="@style/Theme.MaterialComponents"
                  android:usesCleartextTraffic="true">
 
         <activity android:name=".MainActivity">

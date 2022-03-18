@@ -13,12 +13,12 @@ plugins {
 }
 
 android {
-    compileSdk = 28
+    compileSdk = 29
 
     defaultConfig {
         applicationId = "cr.ac.tec.ce3101.tabas"
         minSdk = 15
-        targetSdk = 28
+        targetSdk = 29
         buildToolsVersion = "31.0.0"
         versionCode = 1
         versionName = "1.0"
@@ -38,6 +38,7 @@ android {
 dependencies {
     implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("androidx.appcompat:appcompat-resources:1.3.0")
+    implementation("com.google.android.material:material:1.4.0")
     implementation("com.squareup.retrofit2:retrofit:2.1.0")
     implementation("com.squareup.retrofit2:converter-gson:2.1.0")
 }
