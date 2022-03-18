@@ -14,18 +14,20 @@ export class LoginComponent implements OnInit {
     id: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')]),
     password: new FormControl('', [Validators.required])
   })
-  message!: string;
-  public loginError!: String;
+  message: string = ""
   bcrypt = require('bcryptjs');
   salt = this.bcrypt.genSaltSync(10);
-
+  logged: boolean;
   constructor(
     private router: Router,
     private authService: AuthService,
     private repo: RepositoryService
-  ) { }
+  ) {
+    this.logged = authService.isLoggedIn()
+  }
 
   ngOnInit(): void {
+    this.logged = this.authService.isLoggedIn()
   }
 
   get id() {
@@ -34,6 +36,11 @@ export class LoginComponent implements OnInit {
 
   get password() {
     return this.loginForm.controls['password'].value
+  }
+
+  logout() {
+    this.authService.logout()
+    this.logged = false
   }
 
   onSubmit() {
@@ -52,13 +59,19 @@ export class LoginComponent implements OnInit {
             console.log("Login successful");
             localStorage.setItem('isLoggedIn', "true");
             localStorage.setItem('token', JSON.stringify({ "id": this.id, "password": this.password }));
+            this.logged = true
+            this.message = ""
+
           }
           else {
-            this.loginError = "Please check your userid and password";
+            this.message = "Cédula o contraseña incorrectos";
           }
         }
         )
 
+    }
+    else {
+      this.message = "Por favor verifique que ingreso ambos campos y su cédula solo contiene dígitos";
     }
   }
 }

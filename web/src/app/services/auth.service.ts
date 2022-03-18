@@ -5,8 +5,16 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
   constructor() { }
-  logout(): void {
+  public logout(): void {
     localStorage.setItem('isLoggedIn', 'false');
     localStorage.removeItem('token');
+  }
+  public isLoggedIn(): boolean {
+    if (localStorage.getItem('isLoggedIn') == "true") {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 }
