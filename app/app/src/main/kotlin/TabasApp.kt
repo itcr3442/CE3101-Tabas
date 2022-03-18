@@ -4,4 +4,5 @@ import android.app.Application
 
 class TabasApp : Application() {
   var session : Session? = null
+  var maleta : Maleta? = null
 }

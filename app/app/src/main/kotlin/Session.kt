@@ -19,14 +19,40 @@ class Session(url: String, private val username: String, private val password: S
   }
 
   fun login(auth: (Boolean) -> Unit) {
-    service.checkLogin(username, password).enqueue(object : Callback<Success> {
+    service.checkLogin(username, password).enqueue(object : SimpleCallback<Success> {
       override fun onResponse(call: Call<Success>, response: Response<Success>) {
         auth(response.body()!!.success == 1)
       }
+    })
+  }
 
-      override fun onFailure(call: Call<Success>, t: Throwable) {
-        throw t
+  fun maletas(cb: (List<Maleta>) -> Unit) {
+    service.maletas().enqueue(object : SimpleCallback<List<Maleta>> {
+      override fun onResponse(call: Call<List<Maleta>>, response: Response<List<Maleta>>) {
+        cb(response.body()!!)
       }
-    });
+    })
+  }
+
+  fun relScanRayos(maleta: Maleta, cb: (RelScanRayos?) -> Unit) {
+    service.relScanRayos(maleta.numero).enqueue(object : SimpleCallback<RelScanRayos?> {
+      override fun onResponse(call: Call<RelScanRayos?>, response: Response<RelScanRayos?>) {
+        cb(response.body())
+      }
+    })
+  }
+
+  fun relScanAbordaje(maleta: Maleta, cb: (RelScanAbordaje?) -> Unit) {
+    service.relScanAbordaje(maleta.numero).enqueue(object : SimpleCallback<RelScanAbordaje?> {
+      override fun onResponse(call: Call<RelScanAbordaje?>, response: Response<RelScanAbordaje?>) {
+        cb(response.body())
+      }
+    })
+  }
+}
+
+interface SimpleCallback<T> : Callback<T> {
+  override fun onFailure(call: Call<T>, err: Throwable) {
+    throw err
   }
 }
