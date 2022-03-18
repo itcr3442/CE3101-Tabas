@@ -23,7 +23,7 @@ linestretch: 1.5
 bibliography: bibliografia.bib
 csl: /home/josfemova/UsefulRepos/styles/ieee.csl
 nocite: | 
-  @microsoft-2022A, @microsoft-2022B, @microsoft-2020, @google-2021, @elmasri-2016, @unknown-author-2021
+  @microsoft-2022A, @microsoft-2022B, @microsoft-2020, @google-2021, @google-2022, @elmasri-2016, @unknown-author-2021
 ...
 
 \maketitle

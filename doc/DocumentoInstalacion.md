@@ -83,14 +83,46 @@ http://su.direccion.ip.o:5000/swagger
 
 # App Web
 
-1. Suponiendo que ya tiene IIS configurado y con el servidor corriendo, tan solo cree otro sitio o aplicación web de su preferencia en IIS. De igual manera al caso anterior, mucho dependerá de su contexto, en el caso particular de este manual, solo se agregará la aplicación web al sitio ya creado para el servidor.
+Para este paso es necesario tener instalado el módulo de URL Rewrite de IIS.
+
+1. Suponiendo que ya tiene IIS configurado y con el servidor corriendo, tan solo cree otro sitio web con el nombre de su preferencia en IIS.
 
 2. Las mismas reglas aplican para este despliegue que para el despliegue de servidor - esto incluye el paso de configuración de las credenciales de acuerdo a sus necesidades. Para el contexto de este manual se utilizará el usuario "Todos".
+
+![](manuales/configwebapp.png)
+
+3. La aplicación debe estar configurada para ser accesible desde el puerto 4200. Asegúrese de haber creado las reglas necesarias en el firewall de Windows para permitir las conexiones desde este puerto.
+
+Si el empaquetado provisto no contiene el web.config necesario para IIS, cree dicho archivo en la carpeta de la aplicación y copie el siguiente contenido:
+
+```XML
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <location path="." inheritInChildApplications="false">
+    <system.webServer>
+      <rewrite>
+    	<rules>
+      	  <rule name="Angular Routes" stopProcessing="true">
+            <match url=".*" />
+            <conditions logicalGrouping="MatchAll">
+              <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+              <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+            </conditions>
+            <action type="Rewrite" url="/index.html" />
+      	  </rule>
+    	</rules>
+     </rewrite>
+    </system.webServer>
+  </location>
+</configuration>
+```
 
 # App Móvil
 
 Se provee un archivo .apk que facilita la instalación de la aplicación en un celular android.
 
 1. Ejecute el archivo.
+
 2. Ante la solicitud de permisos de instalación presione en aceptar.
-3. La aplicación debería aparecer ahora disponible para ser ejecutada. 
+
+3. La aplicación debería aparecer ahora disponible para ser ejecutada.

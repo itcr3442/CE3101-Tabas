@@ -56,6 +56,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr *ngFor="let users of users_list">
+                            <td>{{users.cedula}}</td>
+                            <td>{{users.password_hash}}</td>
+                            <td>{{users.nombre}}</td>
+                            <td>{{users.primer_apellido}}</td>
+                            <td>{{users.segundo_apellido}}</td>
+                            <td>{{users.telefono}}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
