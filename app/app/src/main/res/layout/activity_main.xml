@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical" >
+
+    <EditText android:id="@+id/username"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:hint="Usuario" />
+
+    <EditText android:id="@+id/password"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:inputType="textPassword"
+              android:hint="Contraseña" />
+
+    <Button android:onClick="login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingresar" />
+
+    <TextView android:id="@+id/loginError"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:visibility="invisible"
+              android:text="Credenciales incorrectas, intente nuevamente."
+              android:textColor="#ff0000" />
+
+</LinearLayout>
