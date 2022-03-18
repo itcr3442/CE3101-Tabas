@@ -20,6 +20,7 @@ class OverviewActivity : AppCompatActivity() {
   private lateinit var maletas: List<Maleta>
   private var escaneo: MutableList<Maleta> = ArrayList()
   private var abordaje: MutableList<Maleta> = ArrayList()
+  private var ignored = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -31,25 +32,31 @@ class OverviewActivity : AppCompatActivity() {
     session.maletas({ maletas -> run {
       this.maletas = maletas
       for(maleta in maletas) {
-        session.relScanRayos(maleta, { rel -> run {
+        session.getScanRayos(maleta, { rel -> run {
           if(rel == null) {
             escaneo.add(maleta)
-            showIfReady()
-          } else {
-            session.relScanAbordaje(maleta, { rel -> run {
+          } else if(rel.aceptada) {
+            session.getScanAbordaje(maleta, { rel -> run {
               if(rel == null) {
                 abordaje.add(maleta)
-                showIfReady()
-              }
+              } else {
+                ignored += 1;
+			  }
+
+              showIfReady()
             }})
-          }
+          } else {
+            ignored += 1;
+		  }
+
+          showIfReady()
         }})
       }
     }})
   }
 
   private fun showIfReady() {
-    if(escaneo.size + abordaje.size == maletas.size) {
+    if(escaneo.size + abordaje.size + ignored == maletas.size) {
       pager.adapter = PagerAdapter(supportFragmentManager)
       findViewById<TabLayout>(R.id.tabLayout).setupWithViewPager(pager)
     }
@@ -64,16 +71,12 @@ class OverviewActivity : AppCompatActivity() {
     }
   
     override fun getItem(position: Int): Fragment = when(position) {
-      0 -> run {
-        ListFragment(escaneo, { maleta -> run {
-          (getApplication() as TabasApp).maleta = maleta
-          startActivity(Intent(this@OverviewActivity, EscaneoActivity::class.java))
-        } })
-      }
+      0 -> ListFragment(escaneo, { maleta -> run {
+        (getApplication() as TabasApp).maleta = maleta
+        startActivity(Intent(this@OverviewActivity, EscaneoActivity::class.java))
+      } })
 
-      else -> run {
-        ListFragment(abordaje, { id -> run {} })
-      }
+      else -> ListFragment(abordaje, { id -> run {} })
     }
   }
 }

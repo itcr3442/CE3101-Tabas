@@ -25,6 +25,11 @@ class EscaneoActivity : AppCompatActivity() {
   }
 
   fun reject(view: View) {
+    postScan(false)
+  }
+
+  fun postScan(accept: Boolean) {
+    session.postScanRayos(maleta, accept, comment.text.toString(), { finish() })
   }
 }
 

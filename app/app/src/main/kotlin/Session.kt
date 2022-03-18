@@ -34,21 +34,47 @@ class Session(url: String, private val username: String, private val password: S
     })
   }
 
-  fun relScanRayos(maleta: Maleta, cb: (RelScanRayos?) -> Unit) {
-    service.relScanRayos(maleta.numero).enqueue(object : SimpleCallback<RelScanRayos?> {
+  fun getScanRayos(maleta: Maleta, cb: (RelScanRayos?) -> Unit) {
+    service.getScanRayos(maleta.numero).enqueue(object : SimpleCallback<RelScanRayos?> {
       override fun onResponse(call: Call<RelScanRayos?>, response: Response<RelScanRayos?>) {
         cb(response.body())
       }
     })
   }
 
-  fun relScanAbordaje(maleta: Maleta, cb: (RelScanAbordaje?) -> Unit) {
-    service.relScanAbordaje(maleta.numero).enqueue(object : SimpleCallback<RelScanAbordaje?> {
+  fun postScanRayos(maleta: Maleta, accept: Boolean, comment: String, cb: () -> Unit) {
+    val rel = RelScanRayos().apply {
+	  cedula_trabajador = cedula()
+	  numero_maleta = maleta.numero
+	  aceptada = accept
+	  comentarios = comment
+	}
+
+    service.postScanRayos(password, rel).enqueue(object : SimpleCallback<Success> {
+      override fun onResponse(call: Call<Success>, response: Response<Success>) = cb()
+    })
+  }
+
+  fun getScanAbordaje(maleta: Maleta, cb: (RelScanAbordaje?) -> Unit) {
+    service.getScanAbordaje(maleta.numero).enqueue(object : SimpleCallback<RelScanAbordaje?> {
       override fun onResponse(call: Call<RelScanAbordaje?>, response: Response<RelScanAbordaje?>) {
         cb(response.body())
       }
     })
   }
+
+  fun postScanAbordaje(maleta: Maleta, cb: () -> Unit) {
+    val rel = RelScanAbordaje().apply {
+	  cedula_trabajador = cedula()
+	  numero_maleta = maleta.numero
+	}
+
+    service.postScanAbordaje(password, rel).enqueue(object : SimpleCallback<Success> {
+      override fun onResponse(call: Call<Success>, response: Response<Success>) = cb()
+    })
+  }
+
+  fun cedula(): Int = username.toInt()
 }
 
 interface SimpleCallback<T> : Callback<T> {

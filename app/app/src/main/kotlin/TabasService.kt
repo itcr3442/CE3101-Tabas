@@ -2,6 +2,8 @@ package cr.ac.tec.ce3101.tabas.app
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Body;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -13,10 +15,16 @@ interface TabasService {
   fun maletas(): Call<List<Maleta>>
 
   @GET("rel/scan_rayosx_maleta/maleta/{numero}")
-  fun relScanRayos(@Path("numero") numero: Int): Call<RelScanRayos?>
+  fun getScanRayos(@Path("numero") numero: Int): Call<RelScanRayos?>
+
+  @POST("rel/scan_rayosx_maleta")
+  fun postScanRayos(@Query("password_hash") password: String, @Body scan: RelScanRayos): Call<Success>
 
   @GET("rel/scan_asignacion_maleta/maleta/{numero}")
-  fun relScanAbordaje(@Path("numero") numero: Int): Call<RelScanAbordaje?>
+  fun getScanAbordaje(@Path("numero") numero: Int): Call<RelScanAbordaje?>
+
+  @POST("rel/scan_asignacion_maleta")
+  fun postScanAbordaje(@Query("password_hash") password: String, @Body scan: RelScanAbordaje): Call<Success>
 }
 
 class Success {
