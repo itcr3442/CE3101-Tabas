@@ -13,6 +13,7 @@ import { FlightListComponent } from './components/flight-list/flight-list.compon
 import { UserRegisterComponent } from './components/user-register/user-register.component';
 import { BagCartAssignmentComponent } from './components/bag-cart-assignment/bag-cart-assignment.component';
 import { CloseBagCartComponent } from './components/close-bag-cart/close-bag-cart.component';
+import { PdfReportComponent } from './components/pdf-report/pdf-report.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'bag_creation', component: BagCreationComponent },
   { path: 'flight_list', component: FlightListComponent },
   { path: 'user_register', component: UserRegisterComponent },
+  { path: 'pdf_report', component: PdfReportComponent },
 ];
 
 @NgModule({
