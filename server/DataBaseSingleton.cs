@@ -17,13 +17,17 @@ public sealed class DataBaseSingleton
 		string filepath = Environment.CurrentDirectory + "/Data.json";
 		if (!File.Exists(filepath))
 		{
-            // se crean algunos datos iniciales para poder interactuar con la base de datos
+			// se crean algunos datos iniciales para poder interactuar con la base de datos
 			database = new DataBaseState();
 			Trabajador[] x = {
-				new Trabajador{ cedula = 42069, password_hash = "cusadmin", nombre = "admin",
+				new Trabajador{ cedula = 0, password_hash = "cusadmin", nombre = "admin",
 				primer_apellido = "",segundo_apellido = "", rol = "admin"},
-				new Trabajador{ cedula = 69420, password_hash = "cusadmin", nombre = "recep1",
-				primer_apellido = "",segundo_apellido = "", rol = "recepcionista"},
+				new Trabajador{ cedula = 111, password_hash = "cusadmin", nombre = "Julio",
+				primer_apellido = "a",segundo_apellido = "a", rol = "recepcionista"},
+				new Trabajador{ cedula = 222, password_hash = "cusadmin", nombre = "Julian",
+				primer_apellido = "d",segundo_apellido = "d", rol = "embarcador"},
+				new Trabajador{ cedula = 333, password_hash = "cusadmin", nombre = "Juliana",
+				primer_apellido = "v",segundo_apellido = "a", rol = "scan"},
 			};
 			foreach (var item in x)
 			{
@@ -58,17 +62,82 @@ public sealed class DataBaseSingleton
 			{
 				database.aviones.Add(item);
 			}
+			Vuelo[] v = {
+				new Vuelo{numero = 0, avion=42069},
+				new Vuelo{numero = 1, avion=42069},
+			};
+			foreach (var item in v){
+				database.vuelos.Add(item);
+			}
 			Usuario[] m = {
 				new Usuario{cedula = 112312, password_hash = "123", nombre = "Pedro",
 				primer_apellido = "Aguilar",segundo_apellido = "Zapata",telefono = 69420},
-				new Usuario{cedula = 42069, password_hash = "321", nombre = "Luis",
-				primer_apellido = "Vol",segundo_apellido = "Shein",telefono = 88776655}
+				new Usuario{cedula = 65563331, password_hash = "321", nombre = "Luis",
+				primer_apellido = "Vol",segundo_apellido = "Shein",telefono = 88776655},
+				new Usuario{cedula = 11113341, password_hash = "2231s", nombre = "Carlos",
+				primer_apellido = "Mora",segundo_apellido = "Carvajal",telefono = 88776655}
 			};
 			foreach (var item in m)
 			{
 				database.usuarios.Add(item);
 			}
+			Maleta[] n ={
+				new Maleta{numero = 0, cedula_usuario=112312, color=0x0, peso=1.0M,costo_envio=1.0M, nvuelo=0},
+				new Maleta{numero = 1, cedula_usuario=11113341, color=0x22311, peso=2.0M,costo_envio=2.0M, nvuelo=0},
+				new Maleta{numero = 2, cedula_usuario=11113341, color=0x23123, peso=2.0M,costo_envio=3.0M, nvuelo=0},
+				new Maleta{numero = 3, cedula_usuario=65563331, color=0x1223, peso=2.0M,costo_envio=3.0M, nvuelo=1},
+				new Maleta{numero = 4, cedula_usuario=65563331, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=1},
 
+			};
+			foreach (var item in n){
+				database.maletas.Add(item);
+			}
+
+			BagCart[] b = {
+				new BagCart(0,"kyk",2021),
+				new BagCart(1,"kyak",2022),
+				new BagCart(2,"kscyk",2020),
+				new BagCart(3,"kyxxxk",2019),
+				new BagCart(4,"kyhhk",2018),
+			};
+			foreach (var item in b){
+				database.bagcarts.Add(item);
+			}
+			RelMaletaBagCart[] rmb = {
+				new RelMaletaBagCart{numero_maleta = 0, id_bagcart = 1},
+				new RelMaletaBagCart{numero_maleta = 1, id_bagcart = 1},
+				new RelMaletaBagCart{numero_maleta = 3, id_bagcart = 0},
+				new RelMaletaBagCart{numero_maleta = 4, id_bagcart = 0},
+			};
+			foreach (var item in rmb){
+				database.rel_maleta_bagcart.Add(item);
+			}
+			RelScanRayosXMaleta[] rsx = {
+				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 0, aceptada = true, comentarios = ""},
+				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 1, aceptada = true, comentarios = ""},
+				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 2,aceptada = false, comentarios = "peligroso"},
+				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 3, aceptada = true, comentarios = ""},
+				new RelScanRayosXMaleta{cedula_trabajador = 333, numero_maleta= 4, aceptada = true, comentarios = ""}
+			};
+			foreach (var item in rsx) {
+				database.rel_scan_rayosx_maleta.Add(item);
+			}
+			RelVueloBagCart[] rvb = {
+				new RelVueloBagCart{id_bagcart = 0, id_vuelo = 1},
+				new RelVueloBagCart{id_bagcart = 1, id_vuelo = 0, sello = "asdasdasdadas"},
+				new RelVueloBagCart{id_bagcart = 2, id_vuelo = 0},
+				new RelVueloBagCart{id_bagcart = 3, id_vuelo = 0},
+			};
+			foreach (var item in rvb){
+				database.rel_vuelo_bagcart.Add(item);
+			}
+			RelScanAsignacionMaleta[] rsam = {
+				new RelScanAsignacionMaleta{numero_maleta = 0, cedula_trabajador = 222},
+				new RelScanAsignacionMaleta{numero_maleta = 1, cedula_trabajador = 222},
+			};
+			foreach (var item in rsam){
+				database.rel_scan_asignacion_maleta.Add(item);
+			}
 			save_state();
 		}
 		else
@@ -87,7 +156,7 @@ public sealed class DataBaseSingleton
 	}
 	public void save_state()
 	{
-        // se toma el estado actual y se guarda en el archivo Data.json 
+		// se toma el estado actual y se guarda en el archivo Data.json 
 		var options = new JsonSerializerOptions { WriteIndented = true };
 		string jsonString = JsonSerializer.Serialize(database, options);
 		File.WriteAllText(Environment.CurrentDirectory + "/Data.json", jsonString);
