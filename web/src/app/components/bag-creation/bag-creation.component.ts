@@ -138,6 +138,12 @@ export class BagCreationComponent implements OnInit {
     const mins = d.getMinutes().toString()
     const secs = d.getSeconds().toString()
     const num_consecutiva = this.getRndDigits(20)
+    const iva13: string = (costo * 0.13) + ""
+
+    let usuario: any = await lastValueFrom(this.repo.getData("usuarios/" + cedula_usuario))
+    console.log("Usuario: " + JSON.stringify(usuario))
+    let nombre_completo = usuario.nombre + " " + usuario.primer_apellido + " " + usuario.segundo_apellido
+
 
     const clave = "506" + day.padStart(2, "0") + month.padStart(2, "0") + year.substring(2) + this.id.padStart(12, "0") + num_consecutiva + "1" + this.getRndDigits(8)
     {
@@ -230,13 +236,9 @@ export class BagCreationComponent implements OnInit {
 
       root.appendChild(emisor)
 
-
-      let usuario: any = await lastValueFrom(this.repo.getData("usuarios/" + cedula_usuario))
-      console.log("Usuario: " + JSON.stringify(usuario))
       let receptor = xmlDoc.createElement("Receptor")
 
       let receptor_name_node = xmlDoc.createElement("Nombre")
-      let nombre_completo = usuario.nombre + " " + usuario.primer_apellido + " " + usuario.segundo_apellido
       receptor_name_node.appendChild(xmlDoc.createTextNode(nombre_completo.toUpperCase()))
       receptor.appendChild(receptor_name_node)
 
@@ -263,7 +265,7 @@ export class BagCreationComponent implements OnInit {
       let cod_comercia_type_node = xmlDoc.createElement("Tipo")
       let cod_comercia_num_node = xmlDoc.createElement("Codigo")
       cod_comercia_type_node.appendChild(xmlDoc.createTextNode("01"))
-      cod_comercia_type_node.appendChild(xmlDoc.createTextNode("069"))
+      cod_comercia_num_node.appendChild(xmlDoc.createTextNode("069"))
       cod_comercial_node.appendChild(cod_comercia_type_node)
       cod_comercial_node.appendChild(cod_comercia_num_node)
       linea_detalle.appendChild(cod_comercial_node)
@@ -299,8 +301,6 @@ export class BagCreationComponent implements OnInit {
       let subtotal_node = xmlDoc.createElement("SubTotal")
       subtotal_node.appendChild(xmlDoc.createTextNode(costo + ""))
       linea_detalle.appendChild(subtotal_node)
-
-      let iva13: string = (costo * 0.13) + ""
 
       let impuesto_node = xmlDoc.createElement("Impuesto")
       let impuesto_cod_node = xmlDoc.createElement("Codigo")
@@ -408,6 +408,7 @@ export class BagCreationComponent implements OnInit {
       pom.classList.add('dragout');
 
       pom.click();
+      nombre_completo
     }
 
     //PDF
@@ -417,6 +418,49 @@ export class BagCreationComponent implements OnInit {
       pdf.text("Factura electrónica: " + num_consecutiva, 5, 5);
       pdf.text("Clave Numérica: " + clave, 5, 10);
       pdf.text("Fecha de emisión: " + day + "/" + month + "/" + year, 5, 15);
+
+      pdf.setFontSize(8)
+      pdf.text("Teléfono: " + "+(506) 2269-4200", 5, 20);
+      pdf.text("Correo: " + "contabilidad@tecairlines.com", 5, 23.5);
+      pdf.text("Dirección: " + "Alajuela, la Guácima, Aeropuerto Internacional Juan Santamaría", 5, 27);
+
+      pdf.setFontSize(20)
+      pdf.text("TECAIRLINES SOCIEDAD ANÓNIMA", 42, 40);
+
+      pdf.setFontSize(9)
+      pdf.text("Cédula jurídica: 3101573381", 80, 50);
+
+      pdf.setFontSize(10)
+      pdf.text("Receptor: " + nombre_completo, 5, 60)
+      pdf.text("Cédula: " + usuario.cedula, 5, 65)
+      pdf.text("Teléfono: (506) " + usuario.telefono, 5, 70)
+
+      pdf.setFontSize(18)
+      pdf.text("Lineas de Detalle", 75, 95)
+
+      pdf.setFontSize(9)
+      pdf.text("Código", 10, 105)
+      pdf.text("Cantidad", 23, 105)
+      pdf.text("Unidad medida", 37, 105)
+      pdf.text("Descripción", 62, 105)
+      pdf.text("Precio unitario", 88, 105)
+      pdf.text("Descuento", 113, 105)
+      pdf.text("Subtotal", 135, 105)
+      pdf.text("Monto impuestos", 155, 105)
+      pdf.text("Total Factura", 185, 105)
+
+      pdf.setFontSize(7)
+      pdf.text("069", 11, 112)
+      pdf.text("1.00", 24, 112)
+      pdf.text("Unid", 38, 112)
+      pdf.text("Maleta de " + peso + "kg", 63, 112)
+      pdf.text(costo + "", 89, 112)
+      pdf.text("0.00", 113, 112)
+      pdf.text(costo + "", 136, 112)
+      pdf.text(iva13, 156, 112)
+      pdf.text((costo * 1.13) + "", 186, 112)
+
+
 
       pdf.save("FE-" + clave + ".pdf");
     }
