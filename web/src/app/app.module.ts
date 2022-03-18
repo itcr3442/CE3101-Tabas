@@ -18,7 +18,6 @@ import { BagCartAssignmentComponent } from './components/bag-cart-assignment/bag
 import { CloseBagCartComponent } from './components/close-bag-cart/close-bag-cart.component';
 import { PdfReportComponent } from './components/pdf-report/pdf-report.component';
 import { PlanesListComponent } from './components/planes-list/planes-list.component';
-import { RouterModule } from '@angular/router';
 import { BagcartsListComponent } from './components/bagcarts-list/bagcarts-list.component';
 import { WorkersListComponent } from './components/workers-list/workers-list.component';
 import { BagsListComponent } from './components/bags-list/bags-list.component';

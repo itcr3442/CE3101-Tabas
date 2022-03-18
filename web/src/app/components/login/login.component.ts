@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service'
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RepositoryService } from 'src/app/services/repository.service';
 
 @Component({
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit {
 
     }
     else {
-      this.message = "Por favor verifique que ingreso ambos campos y su cédula solo contiene dígitos";
+      this.message = "Por favor verifique que ingresó ambos campos y su cédula solo contiene dígitos";
     }
   }
 }

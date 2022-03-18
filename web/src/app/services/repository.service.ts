@@ -23,7 +23,10 @@ export class RepositoryService {
 
   private generateHeaders = () => {
     return {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      headers: new HttpHeaders({
+        "Access-Control-Allow-Origin": "*", // this will allow all CORS requests
+        'Content-Type': 'application/json'
+      })
     }
   }
 }

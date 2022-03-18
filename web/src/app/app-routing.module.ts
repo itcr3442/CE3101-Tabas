@@ -5,6 +5,7 @@ import { BagsListComponent } from './components/bags-list/bags-list.component';
 import { LoginComponent } from './components/login/login.component';
 import { PlanesListComponent } from './components/planes-list/planes-list.component';
 import { WorkersListComponent } from './components/workers-list/workers-list.component';
+import { WorkerRegisterComponent } from './components/worker-register/worker-register.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'login/redirect', component: LoginComponent },
   { path: 'planes_list', component: PlanesListComponent, canActivate: [AuthGuard] },
   { path: 'workers_list', component: WorkersListComponent },
+  { path: 'worker_reg', component: WorkerRegisterComponent, canActivate: [AuthGuard] },
   { path: 'bagcarts_list', component: BagcartsListComponent },
   { path: 'bags_list', component: BagsListComponent },
 ];
