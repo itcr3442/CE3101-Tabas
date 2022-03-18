@@ -58,17 +58,77 @@ La interacción con el servidor se da por medio de consultas http a la direcció
 ```
 
 ## **Registro de Usuarios**
+
+- `post /usuarios`: Recibe un query string con los credenciales del usuario que registra usuarios. Como cuerpo, recibe un objeto JSON con la siguiente estructura:
+
+```Json
+{
+    cedula	integer($int32)
+    password_hash string
+    nombre string
+    primer_apellido	string
+    segundo_apellido string
+    telefono integer($int32)
+}
+```
+
 ## **Creación de maletas**
-## **Creacuón de Bagcart**
+
+- `post /maletas`: Recibe un query string con las credenciales del trabajador autorizado para registrar maletas. recibe un objeto JSON con la siguiente estructura:
+
+```Json
+{
+cedula_usuario	integer($int32)
+nvuelo	integer($int32)
+color	integer($int32)
+peso	number($double)
+costo_envio	number($double)
+}
+
+```
+El número de maleta se retorna en el objeto de respuesta a la consulta.
+
+## **Creación de Bagcart**
+
+- `post /bagcarts`: Recibe un query string con las credenciales del trabajador autorizado para registrar bagcarts. recibe un objeto JSON con la siguiente estructura:
+
+```Json
+{
+    marca	string
+    modelo	integer($int32)
+}
+
+```
+El número de bagcart se retorna en el objeto de respuesta a la consulta.
+
 ## **Asignación de avión a vuelo**
+
+- `post /vuelos`: Recibe un query string con las credenciales del trabajador autorizado para llevar a cabo la operación. Recibe un objeto json que solo contiene el número de serie del avión que se quiere asignar a un vuelo.
+
+```JSON
+{
+    avion integer($int32)
+}
+```
+
 ## **Asignación de Bagcart a vuelo**
+
+- `post /rel/vuelo_bagcart`: Recibe credenciales en el query string y un objeto JSON con los siguientes campos:
+
+```JSON
+{
+    id_vuelo	integer($int32)
+    id_bagcart	integer($int32)
+    sello	string
+}
+```
+
 ## **Cierre de Bagcart**
 ## **Reporte Maletas por cliente**
 ## **Reporte Conciliación de maletas**
-## **Asignar/escaneo de una maleta**
-## ****
-## ****
-## ****
+## **Asignar/escaneo de una maleta a un bagcart**
+## **Rechazo de una Maleta**
+## **Asignación de maletas a un avion**
 
 # Aplicación Web
 

@@ -200,6 +200,12 @@ public class RelVueloBagCart
 	}
 }
 
+public class QRelVueloBagCart
+{
+	public uint id_vuelo { get; set; }
+	public uint id_bagcart { get; set; }
+}
+
 public class MaletasXCliente
 {
 	public List<Maleta> maletas { get; set; }
