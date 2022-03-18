@@ -107,7 +107,7 @@ public class Trabajador
 	public string? primer_apellido { get; set; }
 	public string? segundo_apellido { get; set; }
 	public string? rol { get; set; }
-
+	public Trabajador(){}
 
 }
 

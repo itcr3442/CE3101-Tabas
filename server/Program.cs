@@ -87,11 +87,16 @@ app.MapGet("/trabajadores", (uint cedula_admin, string password_hash) =>
 		List<Trabajador> x = new List<Trabajador>();
 		foreach (var item in db().trabajadores)
 		{
-			x.Add(item);
-		}
-		foreach (var item in x)
-		{
-			item.password_hash = "*********";
+			x.Add(new Trabajador
+			{
+				cedula = item.cedula,
+				password_hash = "*************",
+				nombre = item.nombre,
+				primer_apellido = item.primer_apellido,
+				segundo_apellido = item.segundo_apellido,
+				rol = item.rol
+
+			});
 		}
 		return x;
 	}
@@ -486,7 +491,7 @@ app.MapPost("/rel/vuelo_bagcart/cierre/bagcart/{id}", (uint id, uint cedula, str
 	}
 	else
 	{
-        x.sello = sello;
+		x.sello = sello;
 		DataBaseSingleton.Instance.save_state();
 		return "{\"success\": 1}";
 	}
