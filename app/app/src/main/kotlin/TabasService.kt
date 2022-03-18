@@ -14,6 +14,9 @@ interface TabasService {
   @GET("maletas")
   fun maletas(): Call<List<Maleta>>
 
+  @GET("bagcarts")
+  fun bagcarts(): Call<List<Bagcart>>
+
   @GET("rel/scan_rayosx_maleta/maleta/{numero}")
   fun getScanRayos(@Path("numero") numero: Int): Call<RelScanRayos?>
 
@@ -25,6 +28,9 @@ interface TabasService {
 
   @POST("rel/scan_asignacion_maleta")
   fun postScanAbordaje(@Query("password_hash") password: String, @Body scan: RelScanAbordaje): Call<Success>
+
+  @POST("rel/maleta_bagcart")
+  fun postMaletaBagcart(@Query("cedula") id: Int, @Query("password_hash") password: String, @Body rel: RelMaletaBagcart): Call<Success>
 }
 
 class Success {
@@ -38,6 +44,17 @@ class Maleta {
   var peso: Float = 0.0f
   var costo_envio: Float = 0.0f
   var nvuelo: Int = 0
+}
+
+class Bagcart {
+  var id: Int = 0
+  var marca: String = ""
+  var modelo: Int = 0
+}
+
+class RelMaletaBagcart {
+  var numero_maleta: Int = 0
+  var id_bagcart: Int = 0
 }
 
 class RelScanRayos {

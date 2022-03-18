@@ -34,6 +34,14 @@ class Session(url: String, private val username: String, private val password: S
     })
   }
 
+  fun bagcarts(cb: (List<Bagcart>) -> Unit) {
+    service.bagcarts().enqueue(object : SimpleCallback<List<Bagcart>> {
+      override fun onResponse(call: Call<List<Bagcart>>, response: Response<List<Bagcart>>) {
+        cb(response.body()!!)
+      }
+    })
+  }
+
   fun getScanRayos(maleta: Maleta, cb: (RelScanRayos?) -> Unit) {
     service.getScanRayos(maleta.numero).enqueue(object : SimpleCallback<RelScanRayos?> {
       override fun onResponse(call: Call<RelScanRayos?>, response: Response<RelScanRayos?>) {
@@ -44,11 +52,11 @@ class Session(url: String, private val username: String, private val password: S
 
   fun postScanRayos(maleta: Maleta, accept: Boolean, comment: String, cb: () -> Unit) {
     val rel = RelScanRayos().apply {
-	  cedula_trabajador = cedula()
-	  numero_maleta = maleta.numero
-	  aceptada = accept
-	  comentarios = comment
-	}
+      cedula_trabajador = cedula()
+      numero_maleta = maleta.numero
+      aceptada = accept
+      comentarios = comment
+    }
 
     service.postScanRayos(password, rel).enqueue(object : SimpleCallback<Success> {
       override fun onResponse(call: Call<Success>, response: Response<Success>) = cb()
@@ -65,11 +73,22 @@ class Session(url: String, private val username: String, private val password: S
 
   fun postScanAbordaje(maleta: Maleta, cb: () -> Unit) {
     val rel = RelScanAbordaje().apply {
-	  cedula_trabajador = cedula()
-	  numero_maleta = maleta.numero
-	}
+      cedula_trabajador = cedula()
+      numero_maleta = maleta.numero
+    }
 
     service.postScanAbordaje(password, rel).enqueue(object : SimpleCallback<Success> {
+      override fun onResponse(call: Call<Success>, response: Response<Success>) = cb()
+    })
+  }
+
+  fun postMaletaBagcart(maleta: Maleta, bagcart: Bagcart, cb: () -> Unit) {
+    val rel = RelMaletaBagcart().apply {
+      numero_maleta = maleta.numero
+      id_bagcart = bagcart.id
+    }
+
+    service.postMaletaBagcart(cedula(), password, rel).enqueue(object : SimpleCallback<Success> {
       override fun onResponse(call: Call<Success>, response: Response<Success>) = cb()
     })
   }
