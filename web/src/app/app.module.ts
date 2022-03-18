@@ -22,6 +22,7 @@ import { PlanesListComponent } from './components/planes-list/planes-list.compon
 import { BagcartsListComponent } from './components/bagcarts-list/bagcarts-list.component';
 import { WorkersListComponent } from './components/workers-list/workers-list.component';
 import { BagsListComponent } from './components/bags-list/bags-list.component';
+import { FlightListComponent } from './components/flight-list/flight-list.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { BagsListComponent } from './components/bags-list/bags-list.component';
     BagcartsListComponent,
     WorkersListComponent,
     BagsListComponent,
+    FlightListComponent,
   ],
   imports: [
     BrowserModule,
