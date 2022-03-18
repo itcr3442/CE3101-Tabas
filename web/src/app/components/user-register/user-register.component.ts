@@ -9,6 +9,9 @@ import { Users } from 'src/app/interfaces/Users.model';
   templateUrl: './user-register.component.html',
   styleUrls: ['./user-register.component.css']
 })
+/**
+ * Componente que contiene la página de registro de usuarios.
+ */
 export class UserRegisterComponent implements OnInit {
 
   public users_list!: Users[];
@@ -31,6 +34,10 @@ export class UserRegisterComponent implements OnInit {
   ) {
   }
 
+  /**
+   * Método que realiza el request al servidor para obtener todos
+   * los usuarios y su información de la base de datos.
+   */
   public getAllUsers = () =>{
     let registerUrl = "usuarios"
     console.log(registerUrl);
@@ -45,7 +52,11 @@ export class UserRegisterComponent implements OnInit {
   ngOnInit(): void {
     this.getAllUsers();
   }
-
+  
+   /**
+   * Método que se ejecuta al apretar el botón registrar.
+   * Muestra en pantalla el mensaje "No implementado"
+   */
   onSubmit() {
     this.message = "No implementado"
   }

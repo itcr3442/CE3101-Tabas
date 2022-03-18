@@ -10,6 +10,9 @@ import { Workers } from 'src/app/interfaces/workers.model';
   templateUrl: './worker-register.component.html',
   styleUrls: ['./worker-register.component.css']
 })
+/**
+ * Componente que contiene la página de registro de nuevos trabajadores.
+ */
 export class WorkerRegisterComponent implements OnInit {
 
   public worker_list!: Workers[];
@@ -58,7 +61,10 @@ export class WorkerRegisterComponent implements OnInit {
   get apellido2() {
     return this.registerForm.controls['apellido2'].value
   }
-
+  /**
+   * Método que realiza el request al servidor para obtener todos
+   * los trabajadores para mostrarlos en la lista correspondiente.
+   */
   public getAllWorkers = () =>{
     if (!this.authService.isLoggedIn()) {
       this.router.navigate(['/login/redirect']);
@@ -81,6 +87,11 @@ export class WorkerRegisterComponent implements OnInit {
     });
   }
 
+  /**
+   * Método que se ejecuta al apretar el botón registrar.
+   * Verifica si el ususario ha iniciado sesión, para obtener los valores de las
+   * casillas correspondientes y así registrar el nuevo trabajador en la base de datos del servidor
+   */
   onSubmit() {
     if (this.registerForm.valid) {
 

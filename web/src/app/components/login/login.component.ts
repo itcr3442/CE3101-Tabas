@@ -9,6 +9,9 @@ import { RepositoryService } from 'src/app/services/repository.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+/**
+ * Componente que contiene la página de inicio de sesión
+ */
 export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
     id: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')]),
@@ -38,12 +41,18 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.controls['password'].value
   }
-
+  /**
+   * Función que se llama para salir de la sesión.
+   * Esta es llamada al apretar el botón correspondiente.
+   */
   logout() {
     this.authService.logout()
     this.logged = false
   }
-
+   /**
+   * Método que se llama para verificar con el servido si los datos introducidos
+   * son válidos para el inicio de sesión.
+   */
   onSubmit() {
     if (this.loginForm.valid) {
 
