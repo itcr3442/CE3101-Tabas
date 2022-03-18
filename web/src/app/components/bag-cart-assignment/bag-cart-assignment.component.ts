@@ -38,14 +38,14 @@ export class BagCartAssignmentComponent implements OnInit {
     return this.registerForm.controls['idbagcart'].value
   }
 
-  public getAllBagCarts = () =>{
+  public getAllBagCarts = () => {
     let registerUrl = "bagcarts"
     this.repo.getData(registerUrl)
-    .subscribe(res => {
+      .subscribe(res => {
         console.log("Result:" + JSON.stringify(res));
         this.bagcarts_list = res as BagCarts[];
       }
-    )
+      )
   }
 
   onSubmit() {
@@ -78,7 +78,7 @@ export class BagCartAssignmentComponent implements OnInit {
           }
           else if ((<any>res).success === 0) {
             this.message = "Sus credenciales no son válidos, o este bag cart ya está registrado en el sistema";
-          } 
+          }
         }
         )
     }
