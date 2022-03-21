@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     val username = username.text.toString()
     val password = password.text.toString()
 
-    val session = Session(baseUrl, username, password)
+    val session = Session(baseUrl, username, password, this)
     session.login({ success -> run {
       if(success) {
         (getApplication() as TabasApp).session = session;
