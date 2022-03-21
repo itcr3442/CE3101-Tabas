@@ -9,6 +9,12 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+/* Los objetos de sesión contienen la información relacionada
+ * a una sesión activa con el servidor. Los métodos públicos
+ * ofrecidos por esta clase permiten realizar solicitudes y
+ * aceptan un parámetro de callback, el cual es invocado al
+ * obtener una respuesta del servidor.
+ */
 class Session(
     url: String,
     private val username: String,
@@ -17,6 +23,7 @@ class Session(
 ) {
     private val service: TabasService
 
+    // Al construir el objeto de sesión se inicializa el cliente REST.
     init {
         val retrofit =
             Retrofit.Builder()
@@ -27,6 +34,7 @@ class Session(
         service = retrofit.create(TabasService::class.java)
     }
 
+    // Intenta iniciar sesión con las credenciales asociadas.
     fun login(auth: (Boolean) -> Unit) {
         service
             .checkLogin(username, password)
@@ -39,6 +47,7 @@ class Session(
             )
     }
 
+    // Enumera todas las maletas.
     fun maletas(cb: (List<Maleta>) -> Unit) {
         service
             .maletas()
@@ -54,6 +63,7 @@ class Session(
             )
     }
 
+    // Enumera todos los bagcarts.
     fun bagcarts(cb: (List<Bagcart>) -> Unit) {
         service
             .bagcarts()
@@ -69,6 +79,7 @@ class Session(
             )
     }
 
+    // Obtiene, de existir, el resultado de escaneo de rayos para una maleta.
     fun getScanRayos(maleta: Maleta, cb: (RelScanRayos?) -> Unit) {
         service
             .getScanRayos(maleta.numero)
@@ -84,6 +95,7 @@ class Session(
             )
     }
 
+    // Registra un escaneo de rayos junto a su comentario y estado de aceptación.
     fun postScanRayos(maleta: Maleta, accept: Boolean, comment: String, cb: () -> Unit) {
         val rel =
             RelScanRayos().apply {
@@ -102,6 +114,7 @@ class Session(
             )
     }
 
+    // Obtiene, de existir, la relación de escaneo de abordaje para la maleta dada.
     fun getScanAbordaje(maleta: Maleta, cb: (RelScanAbordaje?) -> Unit) {
         service
             .getScanAbordaje(maleta.numero)
@@ -117,6 +130,7 @@ class Session(
             )
     }
 
+    // Registra una maleta en avión (escaneo de abordaje). 
     fun postScanAbordaje(maleta: Maleta, cb: () -> Unit) {
         val rel =
             RelScanAbordaje().apply {
@@ -133,6 +147,7 @@ class Session(
             )
     }
 
+    // Asocia una maleta a un bagcart.
     fun postMaletaBagcart(maleta: Maleta, bagcart: Bagcart, cb: () -> Unit) {
         val rel =
             RelMaletaBagcart().apply {
@@ -149,8 +164,14 @@ class Session(
             )
     }
 
+    // Conveniencia par convertir username de cadena a entero
     fun cedula(): Int = username.toInt()
 
+    /* Cb ("callback") se utiliza para evitar código repetido
+     * en las invocaciones anteriores de endpoints, específicamente
+     * la lógica de fallo de conexión o red. En este caso se muestra
+     * un diálogo sencillo.
+     */
     inner abstract class Cb<T> : Callback<T> {
         override fun onFailure(call: Call<T>, err: Throwable) {
             val builder = AlertDialog.Builder(cx)

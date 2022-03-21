@@ -7,6 +7,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/* Definición de endpoints de servidor. Véase documentación de servidor
+ * y de la biblioteca `retrofit2`.
+ */
 interface TabasService {
     @GET("check_login")
     fun checkLogin(
@@ -43,6 +46,11 @@ interface TabasService {
         @Body rel: RelMaletaBagcart
     ): Call<Success>
 }
+
+/* Las siguientes son data-like classes que forman parte
+ * del modelo de datos de la API de servidor. Estas son
+ * simples transcripciones de sus definiciones en servidor.
+ */
 
 class Success {
     var success: Int = 0

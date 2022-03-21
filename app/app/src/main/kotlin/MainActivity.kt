@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+// La actividad "principal" es la pantalla de inicio de sesión.
 class MainActivity : AppCompatActivity() {
     private lateinit var baseUrl: EditText
     private lateinit var username: EditText
@@ -17,12 +18,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Los campos están definidos en el XML de layout.
         baseUrl = findViewById(R.id.baseUrl)
         username = findViewById(R.id.username)
         password = findViewById(R.id.password)
         loginError = findViewById(R.id.loginError)
     }
 
+    /* Para iniciar sesión, se envían las credenciales al servidor
+     * utilizando un objeto de sesión apropiadamente construido. Si
+     * la operación tiene éxito, se entra en la actividad de overview.
+     * De no tener éxito, se muestra un mensaje de error.
+     */
     fun login(view: View) {
         val baseUrl = baseUrl.text.toString()
         val username = username.text.toString()
