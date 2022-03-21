@@ -194,7 +194,7 @@ La aplicación web presentará al usuario principal los métodos principales par
 
 - Al hacer click en el botón **"Registrar BagCart"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de registro de Maletas. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los BagCarts registrados en la base de datos, donde aparecerá los de ID de cada uno, las marcas y el modelo. Del lado izquierdo aparecerán los espacios disponibles para registrar un nuevo BagCart (actualmente no implementado).
 
-## **Asignaci+on de Avión a Vuelos**
+## **Asignación de Avión a Vuelos**
 
 - Al hacer click en el botón **"Asignar Aviones"** de la barra de navegación superior y si ya se ha iniciado sesión, se le va a presentar en pantalla la página de asignación de aviones a vuelos. En esta pantalla aparecerá del lado derecho un tabla con la lista de todos los tipos de aviones disponibles registrados en la base de datos, donde aparecerá el nombre de cada uno, la capacidad y la sección de bodega. En el lado izquierdo de la pantalla aparecerán los espacios disponibles para hacer la asignación de un avión a un vuelo (actualmente no implementado).
 
@@ -216,5 +216,38 @@ La aplicación web presentará al usuario principal los métodos principales par
 
 # Aplicación Móvil
 
-1. Valide sus credenciales en la aplicación.
-2. Dado el primer paso, ya puede realiza las distintas tareas de escaneo. 
+## **Inicio de Sensión** 
+
+1. Ingrese la dirección del servidor y valide sus credenciales en la aplicación.
+
+![](manuales/movil1.jpg)
+
+## **Asignar-escaneo de una maleta a un bagcart**
+
+1. Seleccione la pestaña "Escaneo"
+
+![](manuales/movil2.jpg)
+
+2. El sistema listará aquellas maletas que están pendientes de escanear. Seleccione el número de maleta que desea escanear.
+
+![](manuales/movil3.jpg)
+
+3. Si la maleta pasó el scan de rayos x, seleccione uno de los bagcarts listados para asignar la maleta a un bagcart
+
+## **Rechazo de una maleta**
+
+1. En caso de que la maleta deba ser rechazada en el paso de rayos x, en su pestaña de escaneo agregue un comentario y seleccione la opción de "rechazar".
+![](manuales/movil3.jpg)
+
+## **Asignación de maletas a un avion**
+
+1. Seleccione la pestaña de abordaje
+
+![](manuales/movil4.jpg)
+
+2. Seleccione la maleta que desea escanear para asignar al avión.
+
+![](manuales/movil5.jpg)
+
+3. Presione el botón de escanear para abordaje para comununicar que la maleta ha sido aceptada. 
+

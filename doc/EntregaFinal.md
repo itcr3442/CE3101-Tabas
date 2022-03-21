@@ -228,10 +228,17 @@ Para la el trabajo en equipo se hizo uso de un repositorio en GitHub el cual se 
 
 ![Diagrama de clases de la REST API.](DiagramaClases-RestAPI.png)
 
+Para la REST API el diseño es relativamente simple. La mayor parte de todas las clases señaladas son las que suelen ser descritas con el nombre de "DataClasses", es decir, clases cuyo único objetivo es ser representaciones de datos usualmente con el objetivo de facilitar el intercambio de información con otras aplicaciones. En el caso de este proyecto, estas clases son utilizadas para almacenar el estado de la base de datos y hacer su actualización relativamente simple por medio de utilidades de C# que permiten serializarlas a JSON fácilmente. 
+
+Respecto al uso de OOP, debido a la simplicidad del diseño solo era realmente necesario aplicar un patrón que permitiese regular el acceso al estado de la base de datos. Esto se hace mediante el uso de un patrón Singleton que se asegura de que solo exista un estado de base de datos en toda la aplicación, y al mismo tiempo se encarga de evitar condiciones de carrera entre los que necesitan acceder a dicha base de datos. 
+
+Para llegar al diseño de la REST API fuer necesario primero un proceso de mapeo. La documentación de este proceso de adjunta en anexos bajo el nombre de "Tarea Corta 3".
+
 ![Diagrama de clases de la App Web.](DiagramaClases-AppWeb.png)
 
 ![Diagrama de clases de la App Móvil](DiagramaClases-AppMovil.png)
 
+Los diseños de los frontends son un poco menos específicos debido a que las tecnologías utilizadas como angular no necesariamente piensan en términos de "clases", sino que se basan en la idea de componentes. Igualmente se buscó ilustrar la funcionalidad del diseño utilizando diagramas de clases que describen la estructura general de estas aplicaciones. 
 
 ### Sobre el diseño de la REST API
 

@@ -46,8 +46,12 @@ public sealed class DataBaseSingleton
 			}
 
 			TipoAvion[] z = {
-				new TipoAvion{nombre = "Boeing 787 Max",capacidad=30, secciones_bodega= 3},
+				new TipoAvion{nombre = "Boeing 787 Max",capacidad=30, secciones_bodega= 2},
 				new TipoAvion{nombre = "Boeing 787",capacidad=30, secciones_bodega= 3},
+				new TipoAvion{nombre = "Boeing 783 Max",capacidad=40, secciones_bodega= 5},
+				new TipoAvion{nombre = "Airbus A300",capacidad=20, secciones_bodega= 5},
+				new TipoAvion{nombre = "Airbus A310",capacidad=20, secciones_bodega= 4},
+				new TipoAvion{nombre = "IIL-26",capacidad=80, secciones_bodega= 20},
 			};
 			foreach (var item in z)
 			{
@@ -55,27 +59,34 @@ public sealed class DataBaseSingleton
 			}
 
 			Avion[] w = {
-				new Avion{nserie = 42069, modelo = "Boeing 787", horas_uso = 420},
-				new Avion{nserie = 69420, modelo = "Boeing 787 Max", horas_uso = 69},
+				new Avion{nserie = 42069, modelo = "Boeing 787", horas_uso = 410},
+				new Avion{nserie = 41079, modelo = "Boeing 787 Max", horas_uso = 65},
+				new Avion{nserie = 42368, modelo = "Boeing 783 Max", horas_uso = 62},
+				new Avion{nserie = 67420, modelo = "Airbus A300", horas_uso =12},
+				new Avion{nserie = 68420, modelo = "Airbus A310", horas_uso = 688},
+				new Avion{nserie = 11233, modelo = "IIL-26", horas_uso = 1111},
 			};
 			foreach (var item in w)
 			{
 				database.aviones.Add(item);
 			}
 			Vuelo[] v = {
-				new Vuelo{numero = 0, avion=42069},
-				new Vuelo{numero = 1, avion=42069},
+				new Vuelo{numero = 0, avion=42368},
+				new Vuelo{numero = 1, avion=41079},
+				new Vuelo{numero = 2, avion=41079},
 			};
 			foreach (var item in v){
 				database.vuelos.Add(item);
 			}
 			Usuario[] m = {
 				new Usuario{cedula = 112312, password_hash = "123", nombre = "Pedro",
-				primer_apellido = "Aguilar",segundo_apellido = "Zapata",telefono = 69420},
+				primer_apellido = "Aguilar",segundo_apellido = "Zapata",telefono = 62420},
 				new Usuario{cedula = 65563331, password_hash = "321", nombre = "Luis",
 				primer_apellido = "Vol",segundo_apellido = "Shein",telefono = 88776655},
 				new Usuario{cedula = 11113341, password_hash = "2231s", nombre = "Carlos",
-				primer_apellido = "Mora",segundo_apellido = "Carvajal",telefono = 88776655}
+				primer_apellido = "Mora",segundo_apellido = "Carvajal",telefono = 88776655},
+				new Usuario{cedula = 711213341, password_hash = "sksksksksk", nombre = "Valeria",
+				primer_apellido = "Parripula",segundo_apellido = "Salazar",telefono = 88111995}
 			};
 			foreach (var item in m)
 			{
@@ -89,6 +100,10 @@ public sealed class DataBaseSingleton
 				new Maleta{numero = 4, cedula_usuario=65563331, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=1},
 				new Maleta{numero = 5, cedula_usuario=65563331, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=1},
 				new Maleta{numero = 6, cedula_usuario=112312, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=0},
+				
+				new Maleta{numero = 7, cedula_usuario=711213341, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=2},
+				new Maleta{numero = 8, cedula_usuario=711213341, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=2},
+				new Maleta{numero = 9, cedula_usuario=711213341, color=0x1223, peso=5.0M,costo_envio=3.0M, nvuelo=2},
 
 			};
 			foreach (var item in n){
