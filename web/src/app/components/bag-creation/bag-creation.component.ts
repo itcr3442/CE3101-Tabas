@@ -68,7 +68,10 @@ export class BagCreationComponent implements OnInit {
       )
   }
 
-  onSubmit() {
+  /**
+   * Revisa que los datos del form estén correctos, transforma el color hexa en int y genera la factura XML y PDF
+   */
+  onSubmit(): void {
     if (this.registerForm.valid) {
 
       if (!this.authService.isLoggedIn()) {
@@ -129,6 +132,12 @@ export class BagCreationComponent implements OnInit {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+  /**
+   * Método que genera y descarga la factura en XML y PDF
+   * @param cedula_usuario La cédula del usuario
+   * @param costo El costo de la maleta
+   * @param peso El peso de la maleta
+   */
   async generateXML_PDF(cedula_usuario: string, costo: number, peso: string) {
     const d = new Date();
     const day = d.getDay().toString()
