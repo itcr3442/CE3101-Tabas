@@ -20,20 +20,22 @@ export class PdfReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Obtener datos de los usuarios
     this.repo.getData('usuarios').subscribe(res => {
-      for(const usuario of res as Users[]) {
+      for (const usuario of res as Users[]) {
         const url = `reportes/maletas_x_cliente/${usuario.cedula}`;
         this.repo.getData(url).subscribe(res => {
           const cliente = res as MaletasXCliente;
-          if(cliente.maletas.length != 0) {
+          if (cliente.maletas.length != 0) {
             this.maletasXCliente.push(cliente);
           }
         });
       }
     });
 
+    // Obtener datos de los vuelos
     this.repo.getData('vuelos').subscribe(res => {
-      for(const vuelo of res as Flights[]) {
+      for (const vuelo of res as Flights[]) {
         const url = `reportes/conciliacion_maletas/${vuelo.numero}`;
         this.repo.getData(url).subscribe(res => {
           this.conciliacionMaletas.push(res as ConciliacionMaletas);
@@ -42,10 +44,13 @@ export class PdfReportComponent implements OnInit {
     });
   }
 
+  /**
+   * Método para descargar el pdf con el reporte
+   */
   download(): void {
     const doc = new jsPDF();
     doc.html(document.getElementById('report')!, {
-      callback: function(doc) {
+      callback: function (doc) {
         window.open(window.URL.createObjectURL(doc.output('blob')));
       },
       html2canvas: {
