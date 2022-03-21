@@ -215,3 +215,6 @@ La aplicación web presentará al usuario principal los métodos principales par
 - Al hacer click en el botón **"Vuelos"** de la barra de navegación superior, se le va a presentar en pantalla una página donde aparecerán todos los vuelos registrados en las bases de datos del servidor.
 
 # Aplicación Móvil
+
+1. Valide sus credenciales en la aplicación.
+2. Dado el primer paso, ya puede realiza las distintas tareas de escaneo. 
