@@ -1,12 +1,16 @@
 package cr.ac.tec.ce3101.tabas.app
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class Session(url: String, private val username: String, private val password: String) {
+class Session(url: String, private val username: String, private val password: String, private val cx: Context) {
   private val service: TabasService
 
   init {
@@ -19,7 +23,7 @@ class Session(url: String, private val username: String, private val password: S
   }
 
   fun login(auth: (Boolean) -> Unit) {
-    service.checkLogin(username, password).enqueue(object : SimpleCallback<Success> {
+    service.checkLogin(username, password).enqueue(object : Cb<Success>() {
       override fun onResponse(call: Call<Success>, response: Response<Success>) {
         auth(response.body()!!.success == 1)
       }
@@ -27,7 +31,7 @@ class Session(url: String, private val username: String, private val password: S
   }
 
   fun maletas(cb: (List<Maleta>) -> Unit) {
-    service.maletas().enqueue(object : SimpleCallback<List<Maleta>> {
+    service.maletas().enqueue(object : Cb<List<Maleta>>() {
       override fun onResponse(call: Call<List<Maleta>>, response: Response<List<Maleta>>) {
         cb(response.body()!!)
       }
@@ -35,7 +39,7 @@ class Session(url: String, private val username: String, private val password: S
   }
 
   fun bagcarts(cb: (List<Bagcart>) -> Unit) {
-    service.bagcarts().enqueue(object : SimpleCallback<List<Bagcart>> {
+    service.bagcarts().enqueue(object : Cb<List<Bagcart>>() {
       override fun onResponse(call: Call<List<Bagcart>>, response: Response<List<Bagcart>>) {
         cb(response.body()!!)
       }
@@ -43,7 +47,7 @@ class Session(url: String, private val username: String, private val password: S
   }
 
   fun getScanRayos(maleta: Maleta, cb: (RelScanRayos?) -> Unit) {
-    service.getScanRayos(maleta.numero).enqueue(object : SimpleCallback<RelScanRayos?> {
+    service.getScanRayos(maleta.numero).enqueue(object : Cb<RelScanRayos?>() {
       override fun onResponse(call: Call<RelScanRayos?>, response: Response<RelScanRayos?>) {
         cb(response.body())
       }
@@ -58,13 +62,13 @@ class Session(url: String, private val username: String, private val password: S
       comentarios = comment
     }
 
-    service.postScanRayos(password, rel).enqueue(object : SimpleCallback<Success> {
+    service.postScanRayos(password, rel).enqueue(object : Cb<Success>() {
       override fun onResponse(call: Call<Success>, response: Response<Success>) = cb()
     })
   }
 
   fun getScanAbordaje(maleta: Maleta, cb: (RelScanAbordaje?) -> Unit) {
-    service.getScanAbordaje(maleta.numero).enqueue(object : SimpleCallback<RelScanAbordaje?> {
+    service.getScanAbordaje(maleta.numero).enqueue(object : Cb<RelScanAbordaje?>() {
       override fun onResponse(call: Call<RelScanAbordaje?>, response: Response<RelScanAbordaje?>) {
         cb(response.body())
       }
@@ -77,7 +81,7 @@ class Session(url: String, private val username: String, private val password: S
       numero_maleta = maleta.numero
     }
 
-    service.postScanAbordaje(password, rel).enqueue(object : SimpleCallback<Success> {
+    service.postScanAbordaje(password, rel).enqueue(object : Cb<Success>() {
       override fun onResponse(call: Call<Success>, response: Response<Success>) = cb()
     })
   }
@@ -88,16 +92,22 @@ class Session(url: String, private val username: String, private val password: S
       id_bagcart = bagcart.id
     }
 
-    service.postMaletaBagcart(cedula(), password, rel).enqueue(object : SimpleCallback<Success> {
+    service.postMaletaBagcart(cedula(), password, rel).enqueue(object : Cb<Success>() {
       override fun onResponse(call: Call<Success>, response: Response<Success>) = cb()
     })
   }
 
   fun cedula(): Int = username.toInt()
-}
 
-interface SimpleCallback<T> : Callback<T> {
-  override fun onFailure(call: Call<T>, err: Throwable) {
-    throw err
+  inner abstract class Cb<T> : Callback<T> {
+    override fun onFailure(call: Call<T>, err: Throwable) {
+      val builder = AlertDialog.Builder(cx)
+      builder.setCancelable(false)
+             .setMessage("Error de red")
+             .setPositiveButton("Aceptar", DialogInterface.OnClickListener { dialog, which -> Unit })
+             .create()
+  
+      builder.create().show()
+    }
   }
 }
