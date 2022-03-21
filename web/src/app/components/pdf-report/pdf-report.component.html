@@ -1,1 +1,70 @@
-
+<div>
+    <button (click)="download()" class="btn">Descargar reporte</button>
+    <div id="report">
+        <h1>Maletas por cliente</h1>
+        <div class="table-responsive">
+            <table class="table table-stripped">
+                <thead>
+                    <tr>
+                        <th>Cédula</th>
+                        <th>Nombre</th>
+                        <th>Tel.</th>
+                        <th>No.</th>
+                        <th>Color</th>
+                        <th>Peso</th>
+                        <th>Costo de envío</th>
+                        <th>Vuelo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let cliente of maletasXCliente">
+                        <tr>
+                            <td rowSpan="{{cliente.maletas.length}}">{{cliente.usuario.cedula}}</td>
+							<td rowSpan="{{cliente.maletas.length}}">{{cliente.usuario.primer_apellido}} {{cliente.usuario.segundo_apellido}}, {{cliente.usuario.nombre}}</td>
+                            <td rowSpan="{{cliente.maletas.length}}">{{cliente.usuario.telefono}}</td>
+                            <td>{{cliente.maletas[0].numero}}</td>
+                            <td>{{cliente.maletas[0].color}}</td>
+                            <td>{{cliente.maletas[0].peso}}</td>
+                            <td>{{cliente.maletas[0].costo_envio}}</td>
+                            <td>{{cliente.maletas[0].nvuelo}}</td>
+                        </tr>
+                        <tr *ngFor="let maleta of cliente.maletas.slice(1)">
+                            <td>{{maleta.numero}}</td>
+                            <td>{{maleta.color}}</td>
+                            <td>{{maleta.peso}}</td>
+                            <td>{{maleta.costo_envio}}</td>
+                            <td>{{maleta.nvuelo}}</td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+        <h1>Conciliación de maletas</h1>
+        <div class="table-responsive">
+            <table class="table table-stripped">
+                <thead>
+                    <tr>
+                        <th>Vuelo</th>
+                        <th>Avión</th>
+                        <th>Capacidad</th>
+                        <th>Totales</th>
+                        <th>En bagcarts</th>
+                        <th>En avión</th>
+                        <th>Rechazadas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let conciliacion of conciliacionMaletas">
+                        <td>#{{conciliacion.numero_vuelo}}</td>
+                        <td>{{conciliacion.tipo_avion}}</td>
+                        <td>{{conciliacion.capacidad}}</td>
+                        <td>{{conciliacion.total_maletas}}</td>
+                        <td>{{conciliacion.maletas_en_bagcarts}}</td>
+                        <td>{{conciliacion.maletas_en_avion}}</td>
+                        <td>{{conciliacion.maletas_rechazadas}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div> 
+</div>
